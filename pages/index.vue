@@ -12,21 +12,6 @@ function stringToArray(data: string): string[] {
 }
 
 export default Vue.extend({
-  head() {
-    return {
-      script: [
-        {
-          src: 'https://unpkg.com/tripetto-runner-foundation',
-        },
-        {
-          src: 'https://unpkg.com/tripetto-runner-autoscroll',
-        },
-        {
-          src: 'https://unpkg.com/tripetto-services',
-        },
-      ],
-    }
-  },
   mounted() {
     this.runTripetto()
   },

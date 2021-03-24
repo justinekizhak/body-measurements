@@ -4,13 +4,24 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'body-measurements',
+    title: 'Body Measurements | Justine Kizhakkinedath',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src: 'https://unpkg.com/tripetto-runner-foundation',
+      },
+      {
+        src: 'https://unpkg.com/tripetto-runner-autoscroll',
+      },
+      {
+        src: 'https://unpkg.com/tripetto-services',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

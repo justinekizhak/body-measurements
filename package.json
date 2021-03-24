@@ -24,6 +24,7 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.9.1",
+    "lodash": "^4.17.21",
     "nuxt": "^2.15.3"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@nuxtjs/google-fonts": "^1.3.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@nuxtjs/tailwindcss": "^4.0.1",
+    "@types/lodash": "^4.14.168",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
