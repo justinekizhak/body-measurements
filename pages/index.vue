@@ -1,7 +1,9 @@
 <template>
-  <div class="grid h-screen grid-rows-3 p-8">
-    <div class="text-4xl font-bold break-words">Body Measurements</div>
-    <div ref="form" class=""></div>
+  <div class="grid h-screen p-8">
+    <div class="text-3xl font-bold break-words lg:text-5xl">
+      Body Measurements
+    </div>
+    <div ref="form" class="row-span-8 lg:row-span-4"></div>
     <div class="flex items-end">
       <a
         href="https://justine.kizhak.com"
@@ -46,10 +48,12 @@ export default Vue.extend({
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiMkFpUGR2Tm81dUM2REhaSEdqNHVTT1lzUndJam4vVXJmVTREd2M3cFZyQT0iLCJkZWZpbml0aW9uIjoiSnpHTEFXOGt2eGFNYzJ5VGFQMXY2K0JIaEhoNXUvOENqRERlZEEzbmpRbz0iLCJ0eXBlIjoiY29sbGVjdCJ9.dW6Q-zYb8jyyi8qfWpZ2f0CI82RyyAY01yUuGX_bC7I',
       })
 
+      const element = this.$refs.form
+
       // @ts-ignore
       // eslint-disable-next-line no-undef
       TripettoAutoscroll.run({
-        element: this.$refs.form,
+        element,
         definition: tripetto.definition,
         styles: tripetto.styles,
         l10n: tripetto.l10n,
@@ -63,3 +67,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style>
+iframe {
+  height: 100% !important;
+}
+</style>
