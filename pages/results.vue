@@ -19,23 +19,51 @@
         <div
           class="w-1/3 text-center"
           :class="{
-            'text-red-500': getChange(i) > 0,
-            'text-blue-400': getChange(i) < 0,
+            'text-red-500': !withinMargin(i),
+            'text-blue-400': withinMargin(i),
           }"
         >
           {{ getChangeValue(getChange(i)) }}
         </div>
       </div>
     </div>
+    <div class="mt-16">
+      <span class="mr-4"> Margin Percentage</span>
+      <input
+        v-model="margin"
+        type="number"
+        min="0"
+        max="5"
+        class="text-white bg-gray-700"
+      />
+    </div>
+    <div class="mt-8 mb-8">
+      <div class="mb-4 text-lg font-bold">Legends</div>
+      <div class="flex flex-col gap-4 text-gray-300 lg:ml-8">
+        <div class="text-red-500">
+          <div class="inline-block w-2 h-2 mr-2 bg-red-500 rounded-full"></div>
+          Red: Current measurement is not within margin
+        </div>
+        <div class="text-blue-400">
+          <div class="inline-block w-2 h-2 mr-2 bg-blue-400 rounded-full"></div>
+          Blue: Current measurement is within margin
+        </div>
+        <div>
+          <span class="mr-2 font-bold text-white">-</span> Negative means you
+          need to decrease to achive ideal
+        </div>
+        <div>
+          <span class="mr-2 font-bold text-white">+</span> Positive means you
+          need to increase to achive ideal
+        </div>
+      </div>
+    </div>
     <div class="mb-8">
-      <div class="mb-4 text-red-500">
-        <div class="inline-block w-2 h-2 mr-2 bg-red-500 rounded-full"></div>
-        Red: You need to increase your measurements
-      </div>
-      <div class="text-blue-400">
-        <div class="inline-block w-2 h-2 mr-2 bg-blue-400 rounded-full"></div>
-        Blue: You need to decrease your measurements
-      </div>
+      <a
+        href="https://blog.iafstore.com/en/calculate-the-ideal-body-measurements-a238"
+        class="text-gray-300 border-b border-gray-300 hover:text-white hover:border-white"
+        >Source</a
+      >
     </div>
   </div>
 </template>
@@ -47,8 +75,9 @@ import { get, isEmpty, isNil, isNaN } from 'lodash'
 interface FormData {
   'Distance unit': string
   'Weight unit': string
-  Height: string
   Wrist: string
+  Sex: string
+  Height: string
   Ankle: string
   Weight: string
   Chest: string
@@ -59,7 +88,6 @@ interface FormData {
   Waist: string
   Thigh: string
   Calf: string
-  Sex: string
   [key: string]: string
 }
 // const _defaultData = {
@@ -81,8 +109,8 @@ interface FormData {
 // }
 
 const dataKeys = [
-  'Waist',
   'Chest',
+  'Waist',
   'Shoulders',
   'Neck',
   'Biceps',
@@ -103,7 +131,7 @@ const formulas: {
   [key: string]: (data: FormData) => number
 } = {
   Chest(data) {
-    return parseFloat(data.Wrist) * 6.5
+    return parseFloat(data?.Wrist) * 6.5
   },
   Neck(data) {
     return parseFloat(data?.Chest) * 0.37
@@ -127,7 +155,7 @@ const formulas: {
     return parseFloat(data?.Chest) * 0.34
   },
   Shoulders(data) {
-    return GOLDEN_RATIO * parseFloat(data.Waist) || 0
+    return parseFloat(data?.Waist) * GOLDEN_RATIO
   },
 }
 
@@ -140,6 +168,7 @@ export default Vue.extend({
   data() {
     return {
       dataKeys,
+      margin: 5,
     }
   },
   computed: {
@@ -148,14 +177,16 @@ export default Vue.extend({
       return get(this, '$store.state.currentMeasurements.data', {})
     },
     idealMeasurements(): FormData {
-      const data: FormData = { ...this.currentMeasurements }
+      const data: {
+        [key: string]: string
+      } = { Wrist: this.currentMeasurements.Wrist }
       for (const key of dataKeys) {
-        const value = formulas[key] ? formulas[key](data) : 0
+        const value = formulas[key] ? formulas[key](data as FormData) : 0
         if (!isNil(value)) {
           data[key] = `${round(value)}`
         }
       }
-      return data
+      return data as FormData
     },
   },
   mounted() {
@@ -169,13 +200,13 @@ export default Vue.extend({
         return '-'
       }
       return data[key] && data[key] !== '0'
-        ? `${data[key]} ${data['Distance unit']}`
+        ? `${data[key]} ${this.currentMeasurements['Distance unit']}`
         : '-'
     },
     getChange(key: string): number {
       const d =
-        parseFloat(this.currentMeasurements[key]) -
-        parseFloat(this.idealMeasurements[key])
+        parseFloat(this.idealMeasurements[key]) -
+        parseFloat(this.currentMeasurements[key])
 
       return round(d)
     },
@@ -184,6 +215,20 @@ export default Vue.extend({
         return 'N/A'
       }
       return `${value}`
+      // return `${Math.abs(value)}`
+    },
+    withinMargin(key: string): boolean {
+      const value = this.getChange(key)
+      if (isNaN(value)) {
+        return true
+      }
+      const d = Math.abs(value)
+      const idealV = this.idealMeasurements[key]
+      const margin = (this.margin / 100) * parseFloat(idealV)
+      if (d > margin) {
+        return false
+      }
+      return true
     },
   },
 })
