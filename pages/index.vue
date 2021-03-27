@@ -1,5 +1,5 @@
 <template>
-  <div ref="form" class="flex items-center justify-center">
+  <div ref="form" class="flex items-center justify-center h-full">
     <Spinner />
   </div>
 </template>
@@ -60,7 +60,7 @@ export default Vue.extend({
 
           this.$router.push('/results')
         },
-        persistent: true,
+        // persistent: true,
       })
     },
   },
