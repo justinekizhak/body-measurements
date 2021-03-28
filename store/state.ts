@@ -1,5 +1,6 @@
 export default function () {
   return {
-    currentMeasurement: {},
+    currentMeasurements: {},
+    result: {},
   }
 }

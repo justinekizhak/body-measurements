@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <div class="text-2xl">Results</div>
+  <div class="mt-4">
+    <div class="flex items-center justify-between h-10">
+      <div class="text-2xl">Results</div>
+      <Spinner v-show="savingData" class="h-10 scale-75 transform-gpu" />
+    </div>
     <div
       class="my-8 overflow-auto border-t border-b border-gray-500 divide-y divide-gray-500"
     >
@@ -69,6 +72,7 @@
         >Source</a
       >
     </div>
+    <ResultActions class="mb-8" />
   </div>
 </template>
 
@@ -176,6 +180,7 @@ export default Vue.extend({
     return {
       dataKeys,
       margin: 5,
+      savingData: false,
     }
   },
   computed: {
@@ -209,7 +214,14 @@ export default Vue.extend({
   },
   mounted() {
     if (isEmpty(this.currentMeasurements)) {
-      this.$router.push('/')
+      // this.$router.push('/')
+    } else {
+      // this.$store.commit('setResult', {
+      //   current: this.currentMeasurements,
+      //   ideal: this.idealMeasurements,
+      //   change: this.changes,
+      // })
+      this.saveData()
     }
   },
   methods: {
@@ -233,7 +245,7 @@ export default Vue.extend({
       if (isNaN(value)) {
         return 'N/A'
       }
-      return `${value}`
+      return `${value < 0 ? '' : '+'}${value} ${this.distanceUnit}`
       // return `${Math.abs(value)}`
     },
     withinMargin(key: string): boolean {
@@ -248,6 +260,27 @@ export default Vue.extend({
         return false
       }
       return true
+    },
+    async saveData() {
+      try {
+        const uid = this.$fireModule.auth()?.currentUser?.uid
+        if (!uid) {
+          return
+        }
+        this.savingData = true
+        const db = this.$fireModule.firestore()
+        const docRef = await db.collection(uid).add({
+          timestamp: this.$fireModule.firestore.FieldValue.serverTimestamp(),
+          current: this.currentMeasurements,
+          ideal: this.idealMeasurements,
+          change: this.changes,
+        })
+        console.log('success: ', docRef.id)
+      } catch (error) {
+        console.error('fail: ', error)
+      } finally {
+        this.savingData = false
+      }
     },
   },
 })

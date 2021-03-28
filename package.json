@@ -30,7 +30,8 @@
     "firebaseui": "^4.8.0",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.3",
-    "vue-toastification": "^1.7.11"
+    "vue-toastification": "^1.7.11",
+    "vue-types": "^2.0.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",

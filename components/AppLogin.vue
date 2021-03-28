@@ -53,20 +53,6 @@ export default Vue.extend({
         // }
       }
     },
-    // addData() {
-    //   const db = this.$fireModule.firestore()
-    //   db.collection('test')
-    //     .add({
-    //       first: 'justine',
-    //       last: 'kizhak',
-    //     })
-    //     .then((docRef) => {
-    //       console.log('success: ', docRef.id)
-    //     })
-    //     .catch((error) => {
-    //       console.error('fail: ', error)
-    //     })
-    // },
   },
 })
 </script>
