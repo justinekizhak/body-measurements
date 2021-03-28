@@ -1,58 +1,50 @@
 <template>
-  <div class="flex items-center justify-between gap-8 lg:justify-end">
-    <base-button v-if="loggedIn" class="flex items-center gap-2">
-      <span> Dashboard </span>
-      <img :src="photoURL" class="w-6 h-6 rounded-full" />
-    </base-button>
-    <base-button v-if="!loggedIn" class="ml-auto" @click="login"
-      >Login</base-button
-    >
-    <base-button v-else @click="logout">Logout</base-button>
+  <div>
+    <AppHeaderMenuButtons
+      class="items-center justify-between hidden gap-4 lg:flex lg:justify-end"
+    />
+    <div class="flex justify-end lg:hidden">
+      <base-button class="flex items-center gap-2" @click="toggleMenu">
+        <span> Menu </span>
+        <span class="flex flex-col justify-between h-3">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </span>
+      </base-button>
+      <div v-if="menuOpen">
+        <div class="fixed inset-0 bg-gray-800 opacity-90"></div>
+        <div class="fixed inset-0 p-8">
+          <AppHeaderMenuButtons
+            class="flex flex-col items-end gap-4"
+            @close="toggleMenu"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { get } from 'lodash'
 
 export default Vue.extend({
   data() {
     return {
-      loggedIn: false,
+      menuOpen: false,
     }
   },
-  computed: {
-    currentUser(): any {
-      const d = this.$fireModule.auth()
-      return get(d, 'currentUser', {})
-    },
-    displayName(): string {
-      return this.currentUser.displayName
-    },
-    photoURL(): string {
-      return this.currentUser.photoURL
-    },
-  },
-  mounted() {
-    this.listenForAuthState()
-  },
   methods: {
-    listenForAuthState() {
-      this.$fireModule.auth().onAuthStateChanged((user) => {
-        if (user) {
-          this.loggedIn = true
-        } else {
-          this.loggedIn = false
-        }
-      })
-    },
-    logout() {
-      this.$fireModule.auth().signOut()
-      this.$toast('Logged out')
-    },
-    login() {
-      this.$router.push('/login')
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen
     },
   },
 })
 </script>
+
+<style scoped>
+.bar {
+  height: 2px;
+  @apply w-4 bg-black;
+}
+</style>

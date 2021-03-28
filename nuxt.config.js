@@ -62,7 +62,7 @@ export default {
   firebase: {
     config: {
       apiKey: 'AIzaSyCu-Fy-GNmXyCYyHmU-MTFP4dwk2ZEjOJo',
-      authDomain: 'body-measurement-e610c.firebaseapp.com',
+      authDomain: 'auth.body-measurements.justine.kizhak.com',
       projectId: 'body-measurement-e610c',
       storageBucket: 'body-measurement-e610c.appspot.com',
       messagingSenderId: '873632977425',

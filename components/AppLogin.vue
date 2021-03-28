@@ -38,7 +38,7 @@ export default Vue.extend({
             // firebase.auth.GithubAuthProvider.PROVIDER_ID,
             // firebase.auth.EmailAuthProvider.PROVIDER_ID,
             // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+            // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
           ],
           credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
           tosUrl: 'terms-of-service',
