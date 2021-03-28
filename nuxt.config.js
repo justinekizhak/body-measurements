@@ -1,3 +1,5 @@
+// const ENV = process.env.NODE_ENV
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -54,7 +56,24 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/firebase',
   ],
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyCu-Fy-GNmXyCYyHmU-MTFP4dwk2ZEjOJo',
+      authDomain: 'body-measurement-e610c.firebaseapp.com',
+      projectId: 'body-measurement-e610c',
+      storageBucket: 'body-measurement-e610c.appspot.com',
+      messagingSenderId: '873632977425',
+      appId: '1:873632977425:web:1a8dc9c0d5918abf8817b0',
+      measurementId: 'G-4BKW5SP6VD',
+    },
+    services: {
+      auth: {
+        // emulatorPort: ENV === 'development' ? 9099 : undefined,
+      },
+    },
+  },
 
   tailwindcss: {
     jit: true,
