@@ -1,38 +1,56 @@
 <template>
   <div class="flex items-center justify-center flex-grow">
-    <GoogleButton @click="googleLogin" />
+    <div id="firebaseui-auth-container"></div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
+import 'firebaseui/dist/firebaseui.css'
+
 export default Vue.extend({
   mounted() {
     this.$fireModule.auth().onAuthStateChanged((user) => {
       if (user) {
         this.$router.push('/')
+      } else {
+        this.setupFirebaseUi()
       }
     })
   },
   methods: {
-    async googleLogin() {
-      try {
-        const provider = new this.$fireModule.auth.GoogleAuthProvider()
-        await this.$fireModule.auth().signInWithPopup(provider)
-        // const credential = result.credential
-        // // This gives you a Google Access Token. You can use it to access the Google API.
-        // // @ts-ignore
-        // const token = credential?.accessToken
-        // // The signed-in user info.
-        // const user = result?.user
-        // console.log(token, user)
+    setupFirebaseUi() {
+      if (process.client) {
+        const firebaseui = require('firebaseui')
+        const firebase = this.$fireModule
 
-        this.$router.push('/')
-        this.$toast.success('Login success')
-      } catch (error) {
-        console.error(error.code, error.message, error.email, error.credential)
-        this.$toast.error('Login failed')
+        const uiConfig = {
+          signInSuccessUrl: '',
+          signInOptions: [
+            // Leave the lines as is for the providers you want to offer your users.
+            {
+              provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              clientId: `873632977425-m2holihkq2cuh06j6vhukgjbis3ifmdf.apps.googleusercontent.com`,
+            },
+            // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+            // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+            // firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+          ],
+          credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+          tosUrl: 'terms-of-service',
+          privacyPolicyUrl: 'privacy',
+        }
+
+        const ui =
+          firebaseui.auth.AuthUI.getInstance() ||
+          new firebaseui.auth.AuthUI(firebase.auth())
+        // if (ui.isPendingRedirect()) {
+        ui.start('#firebaseui-auth-container', uiConfig)
+        // }
       }
     },
     // addData() {

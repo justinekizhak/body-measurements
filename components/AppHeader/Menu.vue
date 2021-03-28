@@ -4,7 +4,9 @@
       <span> Dashboard </span>
       <img :src="photoURL" class="w-6 h-6 rounded-full" />
     </base-button>
-    <base-button v-if="!loggedIn" @click="login">Login</base-button>
+    <base-button v-if="!loggedIn" class="ml-auto" @click="login"
+      >Login</base-button
+    >
     <base-button v-else @click="logout">Logout</base-button>
   </div>
 </template>
