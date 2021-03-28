@@ -57,6 +57,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
+    'vue-toastification/nuxt',
   ],
   firebase: {
     config: {
@@ -69,9 +70,8 @@ export default {
       measurementId: 'G-4BKW5SP6VD',
     },
     services: {
-      auth: {
-        // emulatorPort: ENV === 'development' ? 9099 : undefined,
-      },
+      auth: true,
+      firestore: true,
     },
   },
 
@@ -90,4 +90,8 @@ export default {
   build: {},
 
   buildDir: 'dist',
+
+  toast: {
+    position: 'bottom-right',
+  },
 }
