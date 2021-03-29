@@ -1,9 +1,7 @@
 <template>
   <div class="mt-4">
-    <div class="flex items-center justify-between h-10">
-      <div class="text-2xl">Results</div>
-      <Spinner v-show="savingData" class="h-10 scale-75 transform-gpu" />
-    </div>
+    <PageHeader title="Results" action="Saving" :loading="savingData" />
+
     <div
       class="my-8 overflow-auto border-t border-b border-gray-500 divide-y divide-gray-500"
     >
@@ -44,34 +42,9 @@
         class="text-white bg-gray-700"
       />
     </div>
-    <div class="mt-8 mb-8">
-      <div class="mb-4 text-lg font-bold">Legends</div>
-      <div class="flex flex-col gap-4 text-gray-300 lg:ml-8">
-        <div class="text-blue-400">
-          <div class="inline-block w-2 h-2 mr-2 bg-blue-400 rounded-full"></div>
-          Blue: Current measurement is within margin
-        </div>
-        <div class="text-red-500">
-          <div class="inline-block w-2 h-2 mr-2 bg-red-500 rounded-full"></div>
-          Red: Current measurement is not within margin
-        </div>
-        <div>
-          <span class="mr-2 font-bold text-white">-</span> Negative means you
-          need to decrease to achive ideal
-        </div>
-        <div>
-          <span class="mr-2 font-bold text-white">+</span> Positive means you
-          need to increase to achive ideal
-        </div>
-      </div>
-    </div>
-    <div class="mb-8">
-      <a
-        href="https://blog.iafstore.com/en/calculate-the-ideal-body-measurements-a238"
-        class="text-gray-300 border-b border-gray-300 hover:text-white hover:border-white"
-        >Source</a
-      >
-    </div>
+
+    <AppResultLegends />
+
     <ResultActions class="mb-8" />
   </div>
 </template>
@@ -79,100 +52,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { get, isEmpty, isNil, isNaN } from 'lodash'
-
-interface FormData {
-  'Distance unit': string
-  'Weight unit': string
-  Wrist: string
-  Sex: string
-  Height: string
-  Ankle: string
-  Weight: string
-  Chest: string
-  Neck: string
-  Biceps: string
-  Forearm: string
-  Hips: string
-  Waist: string
-  Thigh: string
-  Calf: string
-  [key: string]: string
-}
+import { round, delay, Measurement, FormData, dataKeys, formulas } from '@/core'
 
 interface Dict {
   [key: string]: string
-}
-// const _defaultData = {
-//   'Distance unit': 'cm',
-//   'Weight unit': 'kg',
-//   Height: '172',
-//   Wrist: '17',
-//   Ankle: '',
-//   Weight: '71',
-//   Chest: '101',
-//   Neck: '38',
-//   Biceps: '32',
-//   Forearm: '28',
-//   Hips: '100',
-//   Waist: '84',
-//   Thigh: '60',
-//   Calf: '38',
-//   Sex: 'Male',
-// }
-
-const dataKeys = [
-  'Chest',
-  'Waist',
-  'Shoulders',
-  'Neck',
-  'Biceps',
-  'Forearm',
-  'Hips',
-  'Thigh',
-  'Calf',
-]
-
-// const urls = [
-//   'https://www.ironbuiltfitness.com/the-perfect-male-body',
-//   'https://blog.iafstore.com/en/calculate-the-ideal-body-measurements-a238#:~:text=Method%20for%20calculating%20ideal%20body%20measurements&text=chest%20%3D%20wrist%20x%206.5,forearm%20%3D%20chest%20x%200%3A29',
-// ]
-
-const GOLDEN_RATIO = 1.618
-
-const formulas: {
-  [key: string]: (data: FormData) => number
-} = {
-  Chest(data) {
-    return parseFloat(data?.Wrist) * 6.5
-  },
-  Neck(data) {
-    return parseFloat(data?.Chest) * 0.37
-  },
-  Biceps(data) {
-    return parseFloat(data?.Chest) * 0.36
-  },
-  Forearm(data) {
-    return parseFloat(data?.Chest) * 0.29
-  },
-  Hips(data) {
-    return parseFloat(data?.Chest) * 0.85
-  },
-  Waist(data) {
-    return parseFloat(data?.Chest) * 0.7
-  },
-  Thigh(data) {
-    return parseFloat(data?.Chest) * 0.53
-  },
-  Calf(data) {
-    return parseFloat(data?.Chest) * 0.34
-  },
-  Shoulders(data) {
-    return parseFloat(data?.Waist) * GOLDEN_RATIO
-  },
-}
-
-function round(value: number) {
-  return Math.round(value * 100) / 100
 }
 
 export default Vue.extend({
@@ -263,22 +146,33 @@ export default Vue.extend({
     },
     async saveData() {
       try {
+        const firestore = this.$fireModule.firestore
         const uid = this.$fireModule.auth()?.currentUser?.uid
         if (!uid) {
           return
         }
         this.savingData = true
         const db = this.$fireModule.firestore()
-        const docRef = await db.collection(uid).add({
-          timestamp: this.$fireModule.firestore.FieldValue.serverTimestamp(),
+        const docRef = db.collection('users').doc(uid)
+        const docSnapshot = await docRef.get()
+        const data: Measurement = {
+          timestamp: firestore.Timestamp.now(),
           current: this.currentMeasurements,
           ideal: this.idealMeasurements,
           change: this.changes,
-        })
-        console.log('success: ', docRef.id)
+        }
+        const payload = {
+          measurements: firestore.FieldValue.arrayUnion(data),
+        }
+        if (docSnapshot.exists) {
+          docRef.update(payload)
+        } else {
+          docRef.set(payload)
+        }
       } catch (error) {
-        console.error('fail: ', error)
+        this.$toast.error('Something went wrong in saving the data')
       } finally {
+        await delay(1000)
         this.savingData = false
       }
     },

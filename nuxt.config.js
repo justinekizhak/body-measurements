@@ -71,7 +71,9 @@ export default {
     },
     services: {
       auth: true,
-      firestore: true,
+      firestore: {
+        emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
+      },
     },
   },
 
