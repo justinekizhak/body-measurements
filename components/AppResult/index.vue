@@ -146,6 +146,11 @@ export default Vue.extend({
     },
     async saveData() {
       try {
+        const skip = this.currentMeasurements['Jump the gun?'] === 'Yes'
+        if (skip) {
+          return
+        }
+
         const firestore = this.$fireModule.firestore
         const uid = this.$fireModule.auth()?.currentUser?.uid
         if (!uid) {

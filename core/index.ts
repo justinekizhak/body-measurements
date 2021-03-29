@@ -105,7 +105,8 @@ export const defaultData: FormData = {
   'Weight unit': 'kg',
   Height: '172',
   Wrist: '17',
-  Ankle: '',
+  Ankle: '21',
+  Shoulders: '115',
   Weight: '71',
   Chest: '101',
   Neck: '38',
@@ -180,9 +181,9 @@ export function generateGraphSeries(
         output.data.push(t)
         // }
       } else {
-        const currentV = parseFloat(i.current[key]) || 0
+        // const currentV = parseFloat(i.current[key]) || 0
         const idealV = parseFloat(i.ideal[key]) || 0
-        const differenceV = round(idealV - currentV)
+        // const differenceV = round(idealV - currentV)
         // if (differenceV !== 0) {
         // output.data.push(differenceV)
         // }
