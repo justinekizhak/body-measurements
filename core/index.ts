@@ -1,3 +1,6 @@
+import { isEmpty } from 'lodash'
+import firebase from 'firebase'
+
 export function round(value: number) {
   return Math.round(value * 100) / 100
 }
@@ -12,6 +15,26 @@ export const dataKeys = [
   'Neck',
   'Biceps',
   'Forearm',
+  'Hips',
+  'Thigh',
+  'Calf',
+]
+
+export const upperKeys = [
+  //
+  'Chest',
+  'Shoulders',
+  'Waist',
+]
+
+export const limbKeys = [
+  //
+  'Biceps',
+  'Forearm',
+]
+
+export const lowerKeys = [
+  //
   'Hips',
   'Thigh',
   'Calf',
@@ -40,10 +63,7 @@ export interface Measurement {
   change: FormData
   current: FormData
   ideal: FormData
-  timestamp: {
-    nanoseconds: number
-    seconds: number
-  }
+  timestamp: firebase.firestore.Timestamp
 }
 
 const GOLDEN_RATIO = 1.618
@@ -96,4 +116,81 @@ export const defaultData: FormData = {
   Thigh: '60',
   Calf: '38',
   Sex: 'Male',
+}
+
+export interface GraphSeries {
+  name: string
+  type: string
+  smooth: boolean
+  stack: string | boolean
+  areaStyle?: boolean
+  emphasis: {
+    focus: string
+  }
+  lineStyle: {
+    type: string
+  }
+  data: number[]
+}
+
+export function generateGraphSeries(
+  fullData: Measurement[],
+  bodyParts: string[]
+): GraphSeries[] {
+  const output: GraphSeries[] = []
+  if (isEmpty(fullData)) {
+    return output
+  }
+  for (const i of bodyParts) {
+    const current = generateObject(i)
+    if (current) {
+      output.push(current)
+    }
+    const ideal = generateObject(i, 'ideal')
+    if (ideal) {
+      output.push(ideal)
+    }
+  }
+  return output
+
+  function generateObject(key: string, type: string = 'current') {
+    const output: GraphSeries = {
+      name: type === 'current' ? key : `Ideal ${key}`,
+      type: 'line',
+      smooth: true,
+      stack: key,
+      emphasis: {
+        focus: 'series',
+      },
+      lineStyle: {
+        type: type === 'current' ? 'solid' : 'dashed',
+      },
+      data: [],
+    }
+    if (type === 'current') {
+      output.areaStyle = true
+    }
+    // if (isEmpty(fullData)) {
+    //   return output
+    // }
+    for (const i of fullData) {
+      if (type === 'current') {
+        const t = parseFloat(i.current[key]) || 0
+        if (t !== 0) {
+          output.data.push(t)
+        }
+      } else {
+        const currentV = parseFloat(i.current[key]) || 0
+        const idealV = parseFloat(i.ideal[key]) || 0
+        const differenceV = round(idealV - currentV)
+        if (differenceV !== 0) {
+          output.data.push(differenceV)
+        }
+      }
+    }
+    if (isEmpty(output.data)) {
+      return null
+    }
+    return output
+  }
 }
