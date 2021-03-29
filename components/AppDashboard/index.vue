@@ -1,24 +1,29 @@
 <template>
   <div class="mt-4">
     <PageHeader title="Dashboard" action="Loading" :loading="loadingData" />
-    <AppDashboardChart
-      v-if="upperBody.length > 0"
-      title="Upper Body"
-      :series="upperBody"
-      :xaxis="xaxis"
-    />
-    <AppDashboardChart
-      v-if="lowerBody.length > 0"
-      title="Lower Body"
-      :series="lowerBody"
-      :xaxis="xaxis"
-    />
-    <AppDashboardChart
-      v-if="limbs.length > 0"
-      title="Arms"
-      :series="limbs"
-      :xaxis="xaxis"
-    />
+    <div class="mb-8 divide-y">
+      <AppDashboardChart
+        v-if="upperBody.length > 0"
+        title="Upper Body"
+        :series="upperBody"
+        :xaxis="xaxis"
+        :yaxis-unit="distanceUnit"
+      />
+      <AppDashboardChart
+        v-if="lowerBody.length > 0"
+        title="Lower Body"
+        :series="lowerBody"
+        :xaxis="xaxis"
+        :yaxis-unit="distanceUnit"
+      />
+      <AppDashboardChart
+        v-if="limbs.length > 0"
+        title="Arms"
+        :series="limbs"
+        :xaxis="xaxis"
+        :yaxis-unit="distanceUnit"
+      />
+    </div>
   </div>
 </template>
 
@@ -41,6 +46,7 @@ export default Vue.extend({
       loadingData: false,
       measurements,
       uid: '',
+      distanceUnit: 'cm',
     }
   },
   computed: {

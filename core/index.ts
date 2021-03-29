@@ -122,7 +122,7 @@ export interface GraphSeries {
   name: string
   type: string
   smooth: boolean
-  stack: string | boolean
+  stack?: string | boolean
   areaStyle?: boolean
   emphasis: {
     focus: string
@@ -158,7 +158,7 @@ export function generateGraphSeries(
       name: type === 'current' ? key : `Ideal ${key}`,
       type: 'line',
       smooth: true,
-      stack: key,
+      // stack: key,
       emphasis: {
         focus: 'series',
       },
@@ -176,16 +176,17 @@ export function generateGraphSeries(
     for (const i of fullData) {
       if (type === 'current') {
         const t = parseFloat(i.current[key]) || 0
-        if (t !== 0) {
-          output.data.push(t)
-        }
+        // if (t !== 0) {
+        output.data.push(t)
+        // }
       } else {
         const currentV = parseFloat(i.current[key]) || 0
         const idealV = parseFloat(i.ideal[key]) || 0
         const differenceV = round(idealV - currentV)
-        if (differenceV !== 0) {
-          output.data.push(differenceV)
-        }
+        // if (differenceV !== 0) {
+        // output.data.push(differenceV)
+        // }
+        output.data.push(idealV)
       }
     }
     if (isEmpty(output.data)) {

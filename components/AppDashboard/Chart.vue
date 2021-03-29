@@ -1,11 +1,17 @@
 <template>
-  <div ref="chart" style="width: 100%; height: 450px" class="my-12"></div>
+  <div class="py-8">
+    <div class="mb-4 text-xl">
+      {{ title }}
+    </div>
+    <div ref="chart" class="w-full h-96"></div>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { array, string } from 'vue-types'
 import { GraphSeries } from '@/core'
+import { macarons } from '@/core/echarts'
 
 import * as echarts from 'echarts'
 
@@ -14,6 +20,7 @@ export default Vue.extend({
     series: array<GraphSeries>().def([]),
     xaxis: array<string>().def([]),
     title: string(),
+    yaxisUnit: string().def(''),
   },
   mounted() {
     this.renderChart()
@@ -21,11 +28,13 @@ export default Vue.extend({
   methods: {
     renderChart() {
       const el = this.$refs.chart as HTMLElement
-      const myChart = echarts.init(el)
+      echarts.registerTheme('macarons', macarons)
+      const myChart = echarts.init(el, 'macarons')
 
       const option = {
+        grid: { show: false },
         title: {
-          text: this.title,
+          text: '',
           textStyle: {
             color: 'white',
           },
@@ -33,7 +42,7 @@ export default Vue.extend({
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross',
+            // type: 'cross',
           },
         },
         legend: {
@@ -43,18 +52,41 @@ export default Vue.extend({
         },
         toolbox: {
           feature: {
-            saveAsImage: {},
+            // saveAsImage: {},
           },
         },
         xAxis: [
           {
             // boundaryGap: false,
             data: this.xaxis,
+            showGrid: false,
+            splitLine: {
+              show: false,
+            },
+            splitArea: {
+              show: false,
+            },
           },
         ],
         yAxis: [
           {
+            // show: false,
             type: 'value',
+            splitLine: {
+              show: false,
+            },
+            splitArea: {
+              show: false,
+            },
+            axisLabel: {
+              formatter: `{value} ${this.yaxisUnit}`,
+            },
+            axisLine: {
+              show: true,
+              // lineStyle: {
+              //   color: 'red',
+              // },
+            },
           },
         ],
         series: this.series,
