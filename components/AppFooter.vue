@@ -4,8 +4,10 @@
     target="_blank"
     class="border-b-2 border-gray-300"
   >
-    <span> Created by </span>
-    <span class="ml-1 font-bold tracking-widest uppercase font-anurati">
+    <span class="inline-block font-display"> Created by </span>
+    <span
+      class="inline-block mt-2 font-bold tracking-widest uppercase font-anurati"
+    >
       JustineKizhakkinedath
     </span>
   </a>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full lg:w-auto">
     <AppHeaderMenuButtons
       class="items-center justify-between hidden gap-4 lg:flex lg:justify-end"
     />

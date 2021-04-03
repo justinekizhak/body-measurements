@@ -3,7 +3,7 @@
     class="z-10 flex flex-col items-center justify-between gap-4 lg:gap-0 lg:flex-row ribbon"
   >
     <div
-      class="text-3xl font-bold tracking-widest uppercase break-words cursor-pointer lg:text-5xl font-anurati"
+      class="text-3xl font-bold tracking-widest uppercase break-all cursor-pointer lg:text-5xl font-anurati"
       @click="$router.push('/')"
     >
       Body Measurements
