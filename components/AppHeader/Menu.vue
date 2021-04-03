@@ -14,7 +14,7 @@
       </base-button>
       <div v-if="menuOpen">
         <div class="fixed inset-0 bg-gray-800 opacity-90"></div>
-        <div class="fixed inset-0 p-8">
+        <div class="fixed inset-0 pt-6" style="padding-right: 34px">
           <AppHeaderMenuButtons
             class="flex flex-col items-end gap-4"
             @close="toggleMenu"

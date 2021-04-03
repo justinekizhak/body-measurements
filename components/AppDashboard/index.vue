@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4">
     <PageHeader title="Dashboard" action="Loading" :loading="loadingData" />
-    <div class="mb-8 divide-y">
+    <div class="divide-y">
       <AppDashboardChart
         v-if="upperBody.length > 0"
         title="Upper Body"
@@ -24,6 +24,10 @@
         :yaxis-unit="distanceUnit"
       />
     </div>
+    <div class="py-8 border-t">
+      <h2 class="mb-4 text-xl">Latest Progress</h2>
+      <BaseTable :data="tableData" />
+    </div>
   </div>
 </template>
 
@@ -37,7 +41,10 @@ import {
   upperKeys,
   limbKeys,
   lowerKeys,
+  Table,
+  generateTable,
 } from '@/core'
+import { last } from 'lodash'
 
 export default Vue.extend({
   data() {
@@ -77,6 +84,12 @@ export default Vue.extend({
     limbs(): GraphSeries[] {
       return generateGraphSeries(this.measurements, limbKeys)
     },
+    tableData(): Table {
+      const ideal = last(this.measurements)?.ideal
+      const current = last(this.measurements)?.current
+      const change = last(this.measurements)?.change
+      return generateTable(ideal, current, change)
+    },
   },
   mounted() {
     this.checkUser()
@@ -87,6 +100,8 @@ export default Vue.extend({
         if (user) {
           this.uid = user.uid
           this.getUserData()
+        } else {
+          this.$router.push('/')
         }
       })
     },

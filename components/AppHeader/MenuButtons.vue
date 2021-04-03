@@ -16,7 +16,7 @@
       />
     </base-button>
     <base-button v-if="showLoginButton" class="ml-auto" @click="login"
-      >Login</base-button
+      >SignIn / SignUp</base-button
     >
     <base-button v-if="loggedIn" @click="logout">Logout</base-button>
   </div>

@@ -32,7 +32,7 @@ export default Vue.extend({
       const myChart = echarts.init(el, 'macarons')
 
       const option = {
-        grid: { show: false },
+        grid: { show: false, containLabel: true },
         title: {
           text: '',
           textStyle: {

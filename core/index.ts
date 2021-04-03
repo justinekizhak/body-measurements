@@ -196,3 +196,78 @@ export function generateGraphSeries(
     return output
   }
 }
+
+interface RowObject {
+  text: string
+  class: string
+}
+
+export type Row = string | RowObject
+
+export type Rows = Row[]
+
+export type Table = Rows[]
+
+export function getChange(
+  idealMeasurements: FormData,
+  currentMeasurements: FormData,
+  key: string
+) {
+  const d =
+    parseFloat(idealMeasurements[key]) - parseFloat(currentMeasurements[key])
+
+  return round(d)
+}
+
+export function generateTable(
+  idealMeasurements: FormData | undefined,
+  currentMeasurements: FormData | undefined,
+  changes: FormData | undefined,
+  margin: number = 5,
+  keys: string[] = dataKeys
+): Table {
+  if (!idealMeasurements || !currentMeasurements || !changes) {
+    return []
+  }
+  const getValue = (key: string): string => {
+    const data = idealMeasurements
+    if (isNaN(parseFloat(data[key])) || data[key] === 'NaN') {
+      return '-'
+    }
+    const distanceUnit = currentMeasurements['Distance unit']
+    return data[key] && data[key] !== '0' ? `${data[key]} ${distanceUnit}` : '-'
+  }
+  const withinMargin = (key: string): boolean => {
+    const value = getChange(idealMeasurements, currentMeasurements, key)
+    if (isNaN(value)) {
+      return true
+    }
+    const d = Math.abs(value)
+    const idealV = idealMeasurements[key]
+    const calculatedMargin = (margin / 100) * parseFloat(idealV)
+    if (d > calculatedMargin) {
+      return false
+    }
+    return true
+  }
+  const d = []
+  const head = ['Body Part', 'Ideal Measurement', 'Change']
+  d.push(head)
+  for (const i of keys) {
+    const t = []
+    t.push(i)
+    t.push(getValue(i))
+    const _class = () => {
+      if (changes[i] === 'N/A') {
+        return 'text-gray-400'
+      }
+      return withinMargin(i) ? 'text-blue-400' : 'text-red-500'
+    }
+    t.push({
+      text: changes[i],
+      class: _class(),
+    })
+    d.push(t)
+  }
+  return d
+}
