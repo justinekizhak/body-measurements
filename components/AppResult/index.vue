@@ -142,6 +142,7 @@ export default Vue.extend({
           docRef.set(payload)
         }
       } catch (error) {
+        this.$sentry.captureException(error)
         this.$toast.error('Something went wrong in saving the data')
       } finally {
         await delay(1000)

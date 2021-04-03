@@ -1,4 +1,6 @@
 // const ENV = process.env.NODE_ENV
+const themeColor = '#27272A'
+const description = 'Get you ideal body measurement and track your progress.'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -10,7 +12,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: description },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script: [
@@ -58,6 +60,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
     'vue-toastification/nuxt',
+    '@nuxtjs/sentry',
   ],
   firebase: {
     config: {
@@ -74,6 +77,9 @@ export default {
       firestore: {
         // emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
       },
+      analytics: {
+        collectionEnabled: true,
+      },
     },
   },
 
@@ -83,8 +89,19 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      title: 'Body Measurements',
+      author: 'Justine Kizhakkinedath',
+      theme_color: themeColor,
+      twitterCreator: 'alka1e',
+      nativeUI: true,
+    },
     manifest: {
+      name: 'Body Measurements | Justine Kizhakkinedath',
+      short_name: 'BM',
+      description,
       lang: 'en',
+      background_color: themeColor,
     },
   },
 
@@ -95,5 +112,11 @@ export default {
 
   toast: {
     position: 'bottom-right',
+  },
+
+  sentry: {
+    dsn:
+      'https://a94e12378ea542ffb6f08daced03a930@o564211.ingest.sentry.io/5704824', // Enter your project's DSN here
+    config: {}, // Additional config
   },
 }

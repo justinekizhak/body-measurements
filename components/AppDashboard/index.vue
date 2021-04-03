@@ -118,7 +118,8 @@ export default Vue.extend({
           this.$toast.error('No data available')
         }
       } catch (error) {
-        this.$toast.error('Something went wrong in saving the data')
+        this.$sentry.captureException(error)
+        this.$toast.error('Something went wrong in loading the data')
       } finally {
         await delay(1000)
         this.loadingData = false

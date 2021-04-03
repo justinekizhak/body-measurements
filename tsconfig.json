@@ -28,7 +28,8 @@
       "@nuxt/types",
       "@types/node",
       "@nuxtjs/firebase",
-      "vue-toastification/nuxt"
+      "vue-toastification/nuxt",
+      "@nuxtjs/sentry"
     ]
   },
   "exclude": [
