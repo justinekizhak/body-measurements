@@ -1,6 +1,7 @@
 // const ENV = process.env.NODE_ENV
 const themeColor = '#27272A'
 const description = 'Get you ideal body measurement and track your progress.'
+const baseUrl = 'https://body-measurements.justine.kizhak.com'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -93,7 +94,10 @@ export default {
       title: 'Body Measurements',
       author: 'Justine Kizhakkinedath',
       theme_color: themeColor,
-      twitterCreator: 'alka1e',
+      twitterCreator: '@alka1e',
+      twitterCard: 'summary_large_image',
+      twitterSite: '@alka1e',
+      ogImage: `${baseUrl}/social.png`,
       nativeUI: true,
     },
     manifest: {
@@ -102,6 +106,9 @@ export default {
       description,
       lang: 'en',
       background_color: themeColor,
+    },
+    icon: {
+      source: 'static/icon.png',
     },
   },
 

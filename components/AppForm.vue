@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!hide" ref="form" class="flex items-center justify-center h-full">
+  <div
+    v-if="!hide"
+    ref="form"
+    class="flex items-center justify-center h-full custom-form"
+  >
     <Spinner />
   </div>
 </template>
@@ -73,7 +77,7 @@ export default Vue.extend({
 </script>
 
 <style>
-iframe {
+.custom-form iframe {
   height: 100% !important;
 }
 </style>
