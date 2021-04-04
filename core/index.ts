@@ -1,6 +1,8 @@
 import { isEmpty } from 'lodash'
 import firebase from 'firebase'
 
+type Sex = 'Male' | 'Female'
+
 export function round(value: number) {
   return Math.round(value * 100) / 100
 }
@@ -19,6 +21,13 @@ export const dataKeys = [
   'Thigh',
   'Calf',
 ]
+
+export function calculationKeys(sex: Sex = 'Male') {
+  if (sex === 'Male') {
+    return dataKeys
+  }
+  return ['Waist', 'Shoulders', 'Hips']
+}
 
 export const upperKeys = [
   //
@@ -40,25 +49,29 @@ export const lowerKeys = [
   'Calf',
 ]
 
+type YesNo = 'Yes' | 'No'
+
 export interface FormData {
-  'Distance unit': string
-  'Weight unit': string
+  'Leg length': string
   Wrist: string
-  Sex: string
+  Sex: Sex
+  'Distance unit': 'cm' | 'inch'
+  // 'Weight unit': 'kg' | 'pound'
   Height: string
-  Ankle: string
-  Weight: string
-  Chest: string
-  Neck: string
+  'Rough estimate?': YesNo
+  'Jump the gun?': YesNo
+  // Weight: string
+  Waist: string
+  Shoulders: string
+  Hips: string
   Biceps: string
   Forearm: string
-  Hips: string
-  Waist: string
   Thigh: string
   Calf: string
+  Chest: string
+  // Neck: string
   [key: string]: string
 }
-
 export interface Measurement {
   change: FormData
   current: FormData
@@ -68,56 +81,72 @@ export interface Measurement {
 
 const GOLDEN_RATIO = 1.618
 
-export const formulas: {
+// const legLength = '108cm'
+
+interface Formulas {
   [key: string]: (data: FormData) => number
-} = {
-  Chest(data) {
-    return parseFloat(data?.Wrist) * 6.5
-  },
-  Neck(data) {
-    return parseFloat(data?.Chest) * 0.37
-  },
-  Biceps(data) {
-    return parseFloat(data?.Chest) * 0.36
-  },
-  Forearm(data) {
-    return parseFloat(data?.Chest) * 0.29
-  },
-  Hips(data) {
-    return parseFloat(data?.Chest) * 0.85
-  },
-  Waist(data) {
-    return parseFloat(data?.Chest) * 0.7
-  },
-  Thigh(data) {
-    return parseFloat(data?.Chest) * 0.53
-  },
-  Calf(data) {
-    return parseFloat(data?.Chest) * 0.34
-  },
-  Shoulders(data) {
-    return parseFloat(data?.Waist) * GOLDEN_RATIO
-  },
 }
 
-export const defaultData: FormData = {
-  'Distance unit': 'cm',
-  'Weight unit': 'kg',
-  Height: '172',
-  Wrist: '17',
-  Ankle: '21',
-  Shoulders: '115',
-  Weight: '71',
-  Chest: '101',
-  Neck: '38',
-  Biceps: '32',
-  Forearm: '28',
-  Hips: '100',
-  Waist: '84',
-  Thigh: '60',
-  Calf: '38',
-  Sex: 'Male',
+export function formulas(sex: Sex = 'Male'): Formulas {
+  const isFemale = sex === 'Female'
+  return {
+    Chest(data) {
+      return parseFloat(data?.Wrist) * 6.5
+    },
+    Neck(data) {
+      return parseFloat(data?.Chest) * 0.37
+    },
+    Biceps(data) {
+      return parseFloat(data?.Chest) * 0.36
+    },
+    Forearm(data) {
+      return parseFloat(data?.Chest) * 0.29
+    },
+    Hips(data) {
+      if (isFemale) {
+        return parseFloat(data?.Waist) * 1.42
+      }
+      return parseFloat(data?.Chest) * 0.85
+    },
+    Waist(data) {
+      if (isFemale) {
+        return parseFloat(data?.Height) * 0.382
+      }
+      return parseFloat(data?.Chest) * 0.7
+    },
+    Thigh(data) {
+      return parseFloat(data?.Chest) * 0.53
+    },
+    Calf(data) {
+      return parseFloat(data?.Chest) * 0.34
+    },
+    Shoulders(data) {
+      if (isFemale) {
+        return parseFloat(data?.Waist) * GOLDEN_RATIO
+      }
+      return parseFloat(data?.Waist) * GOLDEN_RATIO
+    },
+  }
 }
+
+// export const defaultData: FormData = {
+//   'Distance unit': 'cm',
+//   'Weight unit': 'kg',
+//   Height: '172',
+//   Wrist: '17',
+//   Ankle: '21',
+//   Shoulders: '115',
+//   Weight: '71',
+//   Chest: '101',
+//   Neck: '38',
+//   Biceps: '32',
+//   Forearm: '28',
+//   Hips: '100',
+//   Waist: '84',
+//   Thigh: '60',
+//   Calf: '38',
+//   Sex: 'Male',
+// }
 
 export interface GraphSeries {
   name: string
@@ -223,8 +252,8 @@ export function generateTable(
   idealMeasurements: FormData | undefined,
   currentMeasurements: FormData | undefined,
   changes: FormData | undefined,
-  margin: number = 5,
-  keys: string[] = dataKeys
+  keys: string[] = [],
+  margin: number = 5
 ): Table {
   if (!idealMeasurements || !currentMeasurements || !changes) {
     return []
@@ -250,7 +279,10 @@ export function generateTable(
     }
     return true
   }
-  const d = []
+  const d: Table = []
+  if (!keys.length) {
+    return d
+  }
   const head = ['Body Part', 'Ideal Measurement', 'Change']
   d.push(head)
   for (const i of keys) {

@@ -32,11 +32,12 @@ import {
   delay,
   Measurement,
   FormData,
-  dataKeys,
+  // dataKeys,
   formulas,
   Table,
   generateTable,
   getChange,
+  calculationKeys,
 } from '@/core'
 
 interface Dict {
@@ -46,20 +47,28 @@ interface Dict {
 export default Vue.extend({
   data() {
     return {
-      dataKeys,
       margin: 5,
       savingData: false,
     }
   },
   computed: {
     currentMeasurements(): FormData {
-      // return _defaultData
       return get(this, '$store.state.currentMeasurements.data', {})
     },
+    dataKeys(): string[] {
+      return calculationKeys(this.currentMeasurements.Sex)
+    },
     idealMeasurements(): FormData {
-      const data: Dict = { Wrist: this.currentMeasurements.Wrist }
-      for (const key of dataKeys) {
-        const value = formulas[key] ? formulas[key](data as FormData) : 0
+      const getInitialData = (): Dict => {
+        if (this.currentMeasurements.Sex === 'Female') {
+          return { Height: this.currentMeasurements.Height }
+        }
+        return { Wrist: this.currentMeasurements.Wrist }
+      }
+      const data = getInitialData()
+      const f = formulas(this.currentMeasurements.Sex)
+      for (const key of this.dataKeys) {
+        const value = f[key] ? f[key](data as FormData) : 0
         if (!isNil(value)) {
           data[key] = `${round(value)}`
         }
@@ -81,7 +90,7 @@ export default Vue.extend({
         // return `${Math.abs(value)}`
       }
       const data: Dict = {}
-      for (const key of dataKeys) {
+      for (const key of this.dataKeys) {
         data[key] = getChangeValue(this.getChange(key))
       }
       return data as FormData
@@ -91,19 +100,15 @@ export default Vue.extend({
         this.idealMeasurements,
         this.currentMeasurements,
         this.changes,
+        this.dataKeys,
         this.margin
       )
     },
   },
   mounted() {
     if (isEmpty(this.currentMeasurements)) {
-      // this.$router.push('/')
+      this.$fireModule.analytics().logEvent('direct navigation to results')
     } else {
-      // this.$store.commit('setResult', {
-      //   current: this.currentMeasurements,
-      //   ideal: this.idealMeasurements,
-      //   change: this.changes,
-      // })
       this.saveData()
     }
   },

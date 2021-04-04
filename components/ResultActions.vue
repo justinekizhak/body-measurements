@@ -12,9 +12,11 @@ export default Vue.extend({
   methods: {
     share() {
       this.$fireModule.analytics().logEvent('share')
+      this.$toast.info('This feature is not available')
     },
     download() {
       this.$fireModule.analytics().logEvent('download')
+      this.$toast.info('This feature is not available')
     },
   },
 })
