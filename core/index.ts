@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
 import firebase from 'firebase'
 
-type Sex = 'Male' | 'Female'
+export type Sex = 'Male' | 'Female'
 
 export function round(value: number) {
   return Math.round(value * 100) / 100
@@ -10,11 +10,23 @@ export function round(value: number) {
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms))
 
+export const displayMaleKeys = [
+  'Shoulders',
+  'Chest',
+  'Biceps',
+  'Forearm',
+  'Waist',
+  // 'Neck',
+  'Hips',
+  'Thigh',
+  'Calf',
+]
+
 export const dataKeys = [
   'Chest',
   'Waist',
   'Shoulders',
-  'Neck',
+  // 'Neck',
   'Biceps',
   'Forearm',
   'Hips',

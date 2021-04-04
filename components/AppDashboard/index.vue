@@ -43,6 +43,8 @@ import {
   lowerKeys,
   Table,
   generateTable,
+  displayMaleKeys,
+  calculationKeys,
 } from '@/core'
 import { last } from 'lodash'
 
@@ -88,7 +90,9 @@ export default Vue.extend({
       const ideal = last(this.measurements)?.ideal
       const current = last(this.measurements)?.current
       const change = last(this.measurements)?.change
-      return generateTable(ideal, current, change)
+      const displayKeys =
+        current?.Sex === 'Female' ? calculationKeys('Female') : displayMaleKeys
+      return generateTable(ideal, current, change, displayKeys)
     },
   },
   mounted() {

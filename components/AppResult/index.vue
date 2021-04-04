@@ -32,12 +32,13 @@ import {
   delay,
   Measurement,
   FormData,
-  // dataKeys,
+  displayMaleKeys,
   formulas,
   Table,
   generateTable,
   getChange,
   calculationKeys,
+  Sex,
 } from '@/core'
 
 interface Dict {
@@ -55,18 +56,21 @@ export default Vue.extend({
     currentMeasurements(): FormData {
       return get(this, '$store.state.currentMeasurements.data', {})
     },
+    sex(): Sex {
+      return this.currentMeasurements.Sex
+    },
     dataKeys(): string[] {
-      return calculationKeys(this.currentMeasurements.Sex)
+      return calculationKeys(this.sex)
     },
     idealMeasurements(): FormData {
       const getInitialData = (): Dict => {
-        if (this.currentMeasurements.Sex === 'Female') {
+        if (this.sex === 'Female') {
           return { Height: this.currentMeasurements.Height }
         }
         return { Wrist: this.currentMeasurements.Wrist }
       }
       const data = getInitialData()
-      const f = formulas(this.currentMeasurements.Sex)
+      const f = formulas(this.sex)
       for (const key of this.dataKeys) {
         const value = f[key] ? f[key](data as FormData) : 0
         if (!isNil(value)) {
@@ -100,7 +104,7 @@ export default Vue.extend({
         this.idealMeasurements,
         this.currentMeasurements,
         this.changes,
-        this.dataKeys,
+        this.sex === 'Female' ? this.dataKeys : displayMaleKeys,
         this.margin
       )
     },
