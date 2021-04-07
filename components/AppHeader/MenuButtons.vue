@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-button class="lg:hidden" @click="$emit('close')">X</base-button>
-    <base-button v-if="showFormButton" @click="goForm"> Form </base-button>
+    <base-button v-if="showFormButton" @click="goForm"> Home </base-button>
     <base-button
       v-if="showDashboardButton"
       class="flex items-center gap-2"

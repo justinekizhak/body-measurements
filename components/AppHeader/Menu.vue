@@ -16,6 +16,7 @@
         <div class="fixed inset-0 bg-gray-800 opacity-90"></div>
         <div class="fixed inset-0 pt-6" style="padding-right: 34px">
           <AppHeaderMenuButtons
+            v-click-outside="toggleMenu"
             class="flex flex-col items-end gap-4"
             @close="toggleMenu"
           />
@@ -27,8 +28,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ClickOutside from 'vue-click-outside'
 
 export default Vue.extend({
+  directives: {
+    ClickOutside,
+  },
   data() {
     return {
       menuOpen: false,
