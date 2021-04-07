@@ -88,7 +88,7 @@ export default Vue.extend({
     changes(): FormData {
       const getChangeValue = (value: number): string => {
         if (isNaN(value)) {
-          return 'N/A'
+          return '-'
         }
         return `${value < 0 ? '' : '+'}${value} ${this.distanceUnit}`
         // return `${Math.abs(value)}`

@@ -4,31 +4,21 @@
     name="table"
     class="my-8 overflow-auto border-t border-b border-gray-500"
   >
-    <div
-      v-if="head.length"
-      name="head"
-      class="flex py-4 font-bold border-b border-gray-500 bg-warmGray-700 hover:bg-gray-700"
-    >
+    <div class="grid divide-y divide-gray-500">
       <div
-        v-for="(hCell, headIndex) in head"
-        :key="`head=${headIndex}`"
-        class="w-full text-center"
-        :class="getClass(hCell)"
-      >
-        {{ getText(hCell) }}
-      </div>
-    </div>
-    <div name="body" class="divide-y divide-gray-500">
-      <div
-        v-for="(row, rowIndex) in body"
+        v-for="(row, rowIndex) in data"
         :key="`row-${rowIndex}`"
-        class="flex py-4 hover:bg-gray-700"
+        class="flex hover:bg-gray-700"
+        :class="{
+          'bg-warmGray-700': !noHead && rowIndex === 0,
+        }"
       >
         <div
           v-for="(cell, cellIndex) in row"
           :key="`cell-${cellIndex}`"
-          class="w-full text-center"
+          class="w-48 py-4 text-center lg:w-full"
           :class="getClass(cell)"
+          @click="handleClick(cell, rowIndex, cellIndex)"
         >
           {{ getText(cell) }}
         </div>
@@ -40,41 +30,32 @@
 <script lang="ts">
 import Vue from 'vue'
 import { array, bool } from 'vue-types'
-import { get, cloneDeep } from 'lodash'
-import { Table, Rows, Row } from '@/core'
+import { Rows, Cell } from '@/core'
 
 export default Vue.extend({
   props: {
     noHead: bool().def(false),
     data: array<Rows>().def([]),
   },
-  computed: {
-    head(): Rows {
-      if (this.noHead) {
-        return []
-      }
-      return get(this, 'data.0', [])
-    },
-    body(): Table {
-      const d = cloneDeep(this.data)
-      if (this.noHead) {
-        return d
-      }
-      return d.splice(1)
-    },
-  },
   methods: {
-    getText(data: Row): string {
+    getText(data: Cell): string {
       if (typeof data === 'string') {
         return data
       }
       return data?.text || '-'
     },
-    getClass(data: Row): string {
+    getClass(data: Cell): string {
       if (typeof data === 'string') {
         return ''
       }
       return data?.class || ''
+    },
+    handleClick(cell: Cell, rowIndex: number, columnIndex: number) {
+      this.$emit('click', {
+        cell,
+        rowIndex,
+        columnIndex,
+      })
     },
   },
 })

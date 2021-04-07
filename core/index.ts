@@ -238,14 +238,14 @@ export function generateGraphSeries(
   }
 }
 
-interface RowObject {
+interface CellObject {
   text: string
   class: string
 }
 
-export type Row = string | RowObject
+export type Cell = string | CellObject
 
-export type Rows = Row[]
+export type Rows = Cell[]
 
 export type Table = Rows[]
 
@@ -270,8 +270,10 @@ export function generateTable(
   if (!idealMeasurements || !currentMeasurements || !changes) {
     return []
   }
-  const getValue = (key: string): string => {
-    const data = idealMeasurements
+  const getValue = (
+    key: string,
+    data: FormData = idealMeasurements
+  ): string => {
     if (isNaN(parseFloat(data[key])) || data[key] === 'NaN') {
       return '-'
     }
@@ -295,14 +297,20 @@ export function generateTable(
   if (!keys.length) {
     return d
   }
-  const head = ['Body Part', 'Ideal Measurement', 'Change']
+  const head = [
+    'Body Part',
+    'Ideal Measurement',
+    'Current Measurement',
+    'Change',
+  ]
   d.push(head)
   for (const i of keys) {
     const t = []
     t.push(i)
     t.push(getValue(i))
+    t.push(getValue(i, currentMeasurements))
     const _class = () => {
-      if (changes[i] === 'N/A') {
+      if (changes[i] === '-') {
         return 'text-gray-400'
       }
       return withinMargin(i) ? 'text-blue-400' : 'text-red-500'
