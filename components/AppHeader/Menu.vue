@@ -12,16 +12,18 @@
           <div class="bar"></div>
         </span>
       </base-button>
-      <div v-if="menuOpen">
-        <div class="fixed inset-0 bg-gray-800 opacity-90"></div>
-        <div class="fixed inset-0 pt-6" style="padding-right: 34px">
-          <AppHeaderMenuButtons
-            v-click-outside="toggleMenu"
-            class="flex flex-col items-end gap-4"
-            @close="toggleMenu"
-          />
+      <transition name="fade">
+        <div v-if="menuOpen">
+          <div class="fixed inset-0 bg-gray-800 opacity-90"></div>
+          <div class="fixed inset-0 pt-6" style="padding-right: 34px">
+            <AppHeaderMenuButtons
+              v-click-outside="toggleMenu"
+              class="flex flex-col items-end gap-4"
+              @close="toggleMenu"
+            />
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -51,5 +53,13 @@ export default Vue.extend({
 .bar {
   height: 2px;
   @apply w-4 bg-black;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
