@@ -1,6 +1,6 @@
 {
   "name": "body-measurements",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -9,7 +9,8 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
-    "lint": "yarn lint:js && yarn lint:style"
+    "lint": "yarn lint:js && yarn lint:style",
+    "release": "standard-version"
   },
   "lint-staged": {
     "*.{js,vue}": "eslint",
@@ -30,6 +31,7 @@
     "echarts": "^5.0.2",
     "firebase": "^8.3.1",
     "firebaseui": "^4.8.0",
+    "gsap": "^3.6.1",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.3",
     "vue-click-outside": "^1.1.0",
@@ -57,6 +59,7 @@
     "lint-staged": "^10.5.4",
     "postcss": "^8.2.8",
     "prettier": "^2.2.1",
+    "standard-version": "^9.2.0",
     "stylelint": "^13.12.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^21.0.0"
