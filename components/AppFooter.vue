@@ -1,10 +1,8 @@
 <template>
-  <a
-    href="https://justine.kizhak.com"
-    target="_blank"
-    class="block pb-2 border-b font-display"
+  <div
+    class="block pt-2 text-sm text-center border-t font-display lg:text-left"
   >
     <span class="inline-block font-display"> Copyright © 2021 </span>
     <span>Justine Kizhakkinedath </span>
-  </a>
+  </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col min-h-screen p-8 text-white bg-gray-800 font-display"
+    class="flex flex-col min-h-screen px-8 py-4 text-white bg-gray-800 lg:py-8 font-display"
   >
     <AppHeader />
     <Nuxt class="mt-8" />
