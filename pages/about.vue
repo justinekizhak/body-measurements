@@ -3,7 +3,7 @@
     <div class="pt-8 lg:pt-16">
       <div class="grid grid-cols-2 mb-4">
         <div class="flex items-center font-bold">Version</div>
-        <div>0.1.0</div>
+        <div>{{ version }}</div>
       </div>
       <div class="grid grid-cols-2 mb-4">
         <div class="flex items-center pb-4 font-bold">Created by</div>
@@ -21,3 +21,16 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { version } from '../project-meta.json'
+
+export default Vue.extend({
+  data() {
+    return {
+      version,
+    }
+  },
+})
+</script>
