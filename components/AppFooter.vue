@@ -2,11 +2,9 @@
   <a
     href="https://justine.kizhak.com"
     target="_blank"
-    class="border-b-2 border-gray-300 font-display"
+    class="block pb-2 border-b font-display"
   >
-    <span class="inline-block font-display"> Created by </span>
-    <span class="inline-block mt-2 font-bold tracking-widest uppercase">
-      Justine Kizhakkinedath
-    </span>
+    <span class="inline-block font-display"> Copyright © 2021 </span>
+    <span>Justine Kizhakkinedath </span>
   </a>
 </template>

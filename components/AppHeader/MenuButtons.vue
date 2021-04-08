@@ -1,11 +1,12 @@
 <template>
   <div>
     <base-button class="lg:hidden" @click="$emit('close')">X</base-button>
-    <base-button v-if="showFormButton" @click="goForm"> Home </base-button>
+    <base-button v-if="showFormButton" @click="goTo('/')"> Home </base-button>
+    <base-button @click="goTo('/about')"> About </base-button>
     <base-button
       v-if="showDashboardButton"
       class="flex items-center gap-2"
-      @click="goDashboard"
+      @click="goTo('/dashboard')"
     >
       <span> Dashboard </span>
       <img
@@ -74,11 +75,8 @@ export default Vue.extend({
       this.$fireModule.analytics().logEvent('login')
       this.$router.push('/login')
     },
-    goDashboard() {
-      this.$router.push('/dashboard')
-    },
-    goForm() {
-      this.$router.push('/')
+    goTo(path: string) {
+      this.$router.push(path)
     },
   },
 })

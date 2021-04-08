@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full lg:w-auto">
+  <div class="lg:w-auto">
     <AppHeaderMenuButtons
       class="items-center justify-between hidden gap-4 lg:flex lg:justify-end"
     />
@@ -18,7 +18,7 @@
           <div class="fixed inset-0 pt-6" style="padding-right: 34px">
             <AppHeaderMenuButtons
               v-click-outside="toggleMenu"
-              class="flex flex-col items-end gap-4"
+              class="flex flex-col items-end gap-4 ml-auto w-[160px]"
               @close="toggleMenu"
             />
           </div>
