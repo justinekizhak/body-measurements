@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import { isEmpty, last } from 'lodash'
 import firebase from 'firebase'
 
 export type Sex = 'Male' | 'Female'
@@ -34,8 +34,14 @@ export const dataKeys = [
   'Calf',
 ]
 
-export function calculationKeys(sex: Sex = 'Male') {
+export function calculationKeys(
+  sex: Sex = 'Male',
+  displayKeys: boolean = false
+) {
   if (sex === 'Male') {
+    if (displayKeys) {
+      return displayMaleKeys
+    }
     return dataKeys
   }
   return ['Waist', 'Shoulders', 'Hips']
@@ -245,9 +251,9 @@ interface CellObject {
 
 export type Cell = string | CellObject
 
-export type Rows = Cell[]
+export type Row = Cell[]
 
-export type Table = Rows[]
+export type Table = Row[]
 
 export function getChange(
   idealMeasurements: FormData,
@@ -322,4 +328,45 @@ export function generateTable(
     d.push(t)
   }
   return d
+}
+
+export function getTime(timestamp: firebase.firestore.Timestamp) {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    weekday: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }
+  const t = timestamp.toDate()
+  // @ts-ignore
+  const t2 = t.toLocaleString(undefined, options)
+  return t2
+}
+
+export function generateTable2Data(
+  measurements: Measurement[],
+  distanceUnit: string = 'cm'
+): Table {
+  const output = []
+  const current = last(measurements)?.current
+  const metadataKeys = ['Timestamp']
+  const dataKeys = calculationKeys(current?.Sex, true)
+  const keys = [...metadataKeys, ...dataKeys]
+
+  output.push(keys)
+  for (const i of measurements) {
+    output.push(getRowData(i))
+  }
+  return output
+
+  function getRowData(data: Measurement): Row {
+    const output = []
+    output.push(getTime(data.timestamp))
+    for (const i of dataKeys) {
+      output.push(`${data.current[i]} ${distanceUnit}`)
+    }
+    return output
+  }
 }

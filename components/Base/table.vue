@@ -8,17 +8,18 @@
       <div
         v-for="(row, rowIndex) in data"
         :key="`row-${rowIndex}`"
-        class="flex hover:bg-gray-700"
-        :class="{
-          'bg-warmGray-700': !noHead && rowIndex === 0,
-        }"
+        name="row"
+        class="flex"
+        :class="getRowStyle(rowIndex)"
+        @click="handleRowClick(row, rowIndex)"
       >
         <div
           v-for="(cell, cellIndex) in row"
           :key="`cell-${cellIndex}`"
-          class="w-48 py-4 text-center lg:w-full"
-          :class="getClass(cell)"
-          @click="handleClick(cell, rowIndex, cellIndex)"
+          name="cell"
+          class="w-48 lg:min-w-[16rem] py-4 text-center lg:w-full"
+          :class="getClass(cell, rowIndex, cellIndex)"
+          @click="handleCellClick(cell, rowIndex, cellIndex)"
         >
           {{ getText(cell) }}
         </div>
@@ -30,12 +31,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { array, bool } from 'vue-types'
-import { Rows, Cell } from '@/core'
+import { Row, Cell } from '@/core'
+import { get } from 'lodash'
 
 export default Vue.extend({
   props: {
     noHead: bool().def(false),
-    data: array<Rows>().def([]),
+    data: array<Row>().def([]),
+    cellClickable: bool().def(false),
+    rowClickable: bool().def(false),
+    headClickable: bool().def(false),
   },
   methods: {
     getText(data: Cell): string {
@@ -44,17 +49,46 @@ export default Vue.extend({
       }
       return data?.text || '-'
     },
-    getClass(data: Cell): string {
-      if (typeof data === 'string') {
-        return ''
+    getClass(
+      data: Cell,
+      rowIndex: number = -1
+      // columnIndex: number = null
+    ): object {
+      const customStyle = get(data, 'class', '')
+      const isHead = !this.noHead && rowIndex === 0
+      return {
+        [customStyle]: true,
+        'cursor-pointer hover:bg-blue-900':
+          (isHead && this.headClickable) || this.cellClickable,
       }
-      return data?.class || ''
     },
-    handleClick(cell: Cell, rowIndex: number, columnIndex: number) {
-      this.$emit('click', {
+    getRowStyle(rowIndex: number) {
+      const isHead = !this.noHead && rowIndex === 0
+      return {
+        'bg-warmGray-700': isHead,
+        'hover:bg-gray-700':
+          (!this.cellClickable && !this.headClickable) ||
+          (!this.cellClickable && !isHead),
+        'cursor-pointer hover:bg-blue-900': this.rowClickable,
+      }
+    },
+    handleCellClick(cell: Cell, rowIndex: number, columnIndex: number) {
+      if (!this.cellClickable) {
+        return
+      }
+      this.$emit('cell-click', {
         cell,
         rowIndex,
         columnIndex,
+      })
+    },
+    handleRowClick(row: Row, rowIndex: number) {
+      if (!this.rowClickable) {
+        return
+      }
+      this.$emit('row-click', {
+        row,
+        rowIndex,
       })
     },
   },

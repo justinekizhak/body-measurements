@@ -28,6 +28,10 @@
       <h2 class="mb-4 text-xl">Latest Progress</h2>
       <BaseTable :data="tableData" />
     </div>
+    <div class="py-8 border-t">
+      <h2 class="mb-4 text-xl">Full Table</h2>
+      <BaseTable :data="table2Data" />
+    </div>
   </div>
 </template>
 
@@ -45,6 +49,8 @@ import {
   generateTable,
   displayMaleKeys,
   calculationKeys,
+  generateTable2Data,
+  getTime,
 } from '@/core'
 import { last } from 'lodash'
 
@@ -61,19 +67,8 @@ export default Vue.extend({
   computed: {
     xaxis(): string[] {
       const d = []
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        weekday: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      }
       for (const i of this.measurements) {
-        const t = i.timestamp.toDate()
-        // @ts-ignore
-        const t2 = t.toLocaleString(undefined, options)
-        d.push(t2)
+        d.push(getTime(i.timestamp))
       }
       return d
     },
@@ -93,6 +88,9 @@ export default Vue.extend({
       const displayKeys =
         current?.Sex === 'Female' ? calculationKeys('Female') : displayMaleKeys
       return generateTable(ideal, current, change, displayKeys)
+    },
+    table2Data(): Table {
+      return generateTable2Data(this.measurements)
     },
   },
   mounted() {
