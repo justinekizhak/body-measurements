@@ -72,7 +72,7 @@ export default Vue.extend({
       this.$toast('Logged out')
     },
     login() {
-      this.$fireModule.analytics().logEvent('login')
+      // this.$fireModule.analytics().logEvent('login')
       this.$router.push('/login')
     },
     goTo(path: string) {

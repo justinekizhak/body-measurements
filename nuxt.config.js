@@ -78,9 +78,9 @@ export default {
       firestore: {
         // emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
       },
-      analytics: {
-        collectionEnabled: true,
-      },
+      // analytics: {
+      //   collectionEnabled: true,
+      // },
     },
   },
 

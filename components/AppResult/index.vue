@@ -111,7 +111,7 @@ export default Vue.extend({
   },
   mounted() {
     if (isEmpty(this.currentMeasurements)) {
-      this.$fireModule.analytics().logEvent('direct navigation to results')
+      // this.$fireModule.analytics().logEvent('direct navigation to results')
     } else {
       this.saveData()
     }

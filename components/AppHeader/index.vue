@@ -1,5 +1,7 @@
 <template>
-  <div class="z-10 flex items-center justify-between gap-4 ribbon">
+  <div
+    class="fixed top-0 left-0 z-10 flex items-center justify-between w-full gap-4 px-8 py-4 bg-gray-800 ribbon"
+  >
     <div
       class="text-3xl font-bold tracking-widest uppercase break-all cursor-pointer font-anurati"
       @click="$router.push('/')"
