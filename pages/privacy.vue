@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center py-16 font-display">
-    <PrivacyPolicy class="prose prose-lg" />
-  </div>
+  <legal-docs>
+    <PrivacyPolicy />
+  </legal-docs>
 </template>

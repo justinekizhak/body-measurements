@@ -1,10 +1,12 @@
 <template>
-  <div
-    v-if="!hide"
-    ref="form"
-    class="flex items-center justify-center h-full custom-form"
-  >
-    <Spinner />
+  <div class="flex justify-center h-full">
+    <div
+      v-if="!hide"
+      ref="form"
+      class="flex items-center justify-center h-full custom-form w-[640px]"
+    >
+      <Spinner />
+    </div>
   </div>
 </template>
 
