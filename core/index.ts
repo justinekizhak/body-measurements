@@ -245,8 +245,9 @@ export function generateGraphSeries(
 }
 
 interface CellObject {
+  name?: string
   text: string
-  class: string
+  class?: string
 }
 
 export type Cell = string | CellObject
@@ -254,6 +255,11 @@ export type Cell = string | CellObject
 export type Row = Cell[]
 
 export type Table = Row[]
+export interface TableCellClick {
+  cell: Cell
+  columnIndex: number
+  rowIndex: number
+}
 
 export function getChange(
   idealMeasurements: FormData,
@@ -351,22 +357,25 @@ export function generateTable2Data(
 ): Table {
   const output = []
   const current = last(measurements)?.current
-  const metadataKeys = ['Timestamp']
+  const before = ['', 'Timestamp']
   const dataKeys = calculationKeys(current?.Sex, true)
-  const keys = [...metadataKeys, ...dataKeys]
+  const after = [{ name: 'Delete', text: '' }]
+  const keys = [...before, ...dataKeys, ...after]
 
   output.push(keys)
-  for (const i of measurements) {
-    output.push(getRowData(i))
+  for (let index = 0; index < measurements.length; index++) {
+    output.push(getRowData(measurements[index], index + 1))
   }
   return output
 
-  function getRowData(data: Measurement): Row {
+  function getRowData(data: Measurement, index = 0): Row {
     const output = []
+    output.push(`${index}`)
     output.push(getTime(data.timestamp))
     for (const i of dataKeys) {
       output.push(`${data.current[i]} ${distanceUnit}`)
     }
+    output.push('Delete')
     return output
   }
 }

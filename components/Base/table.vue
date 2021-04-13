@@ -17,11 +17,19 @@
           v-for="(cell, cellIndex) in row"
           :key="`cell-${cellIndex}`"
           name="cell"
-          class="w-48 lg:min-w-[16rem] py-4 text-center lg:w-full"
+          class="w-48 lg:min-w-[16rem] py-4 lg:w-full flex justify-center items-center"
           :class="getClass(cell, rowIndex, cellIndex)"
-          @click="handleCellClick(cell, rowIndex, cellIndex)"
         >
-          {{ getText(cell) }}
+          <span v-if="!isHead(rowIndex) && isButton(cellIndex)">
+            <base-button
+              class=""
+              @click="handleCellClick(cell, rowIndex, cellIndex)"
+              >{{ cell }}</base-button
+            >
+          </span>
+          <span v-else @click="handleCellClick(cell, rowIndex, cellIndex)">
+            {{ getText(cell) }}
+          </span>
         </div>
       </div>
     </div>
@@ -31,7 +39,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { array, bool } from 'vue-types'
-import { Row, Cell } from '@/core'
+import { Row, Cell, TableCellClick } from '@/core'
 import { get } from 'lodash'
 
 export default Vue.extend({
@@ -41,13 +49,20 @@ export default Vue.extend({
     cellClickable: bool().def(false),
     rowClickable: bool().def(false),
     headClickable: bool().def(false),
+    buttonCol: array<number>().def(),
   },
   methods: {
     getText(data: Cell): string {
       if (typeof data === 'string') {
         return data
       }
-      return data?.text || '-'
+      return data?.text || ''
+    },
+    isHead(rowIndex: number): boolean {
+      return !this.noHead && rowIndex === 0
+    },
+    isButton(cellIndex: number): boolean {
+      return this.buttonCol && this.buttonCol.includes(cellIndex)
     },
     getClass(
       data: Cell,
@@ -55,15 +70,14 @@ export default Vue.extend({
       // columnIndex: number = null
     ): object {
       const customStyle = get(data, 'class', '')
-      const isHead = !this.noHead && rowIndex === 0
       return {
         [customStyle]: true,
         'cursor-pointer hover:bg-blue-900':
-          (isHead && this.headClickable) || this.cellClickable,
+          (this.isHead(rowIndex) && this.headClickable) || this.cellClickable,
       }
     },
     getRowStyle(rowIndex: number) {
-      const isHead = !this.noHead && rowIndex === 0
+      const isHead = this.isHead(rowIndex)
       return {
         'bg-warmGray-700': isHead,
         'hover:bg-gray-700':
@@ -73,14 +87,15 @@ export default Vue.extend({
       }
     },
     handleCellClick(cell: Cell, rowIndex: number, columnIndex: number) {
-      if (!this.cellClickable) {
+      if (!this.cellClickable && !this.isButton(columnIndex)) {
         return
       }
-      this.$emit('cell-click', {
+      const payload: TableCellClick = {
         cell,
         rowIndex,
         columnIndex,
-      })
+      }
+      this.$emit('cell-click', payload)
     },
     handleRowClick(row: Row, rowIndex: number) {
       if (!this.rowClickable) {

@@ -14,20 +14,18 @@
               target="_blank"
               href="https://twitter.com/alka1e"
             >
-              @alka1e
+              Justine Kizhakkinedath
             </a>
           </div>
         </div>
       </div>
       <div class="flex flex-col items-center my-12">
         <img class="w-52 lg:w-1/3" src="social.png" />
-        <div class="text-xs italic text-center">
-          Body Measurements <br />
-          by Justine Kizhakkinedath
-        </div>
+        <!-- <div class="text-xs italic text-center">Body Measurements</div> -->
       </div>
-      <div class="flex justify-center w-full mb-6">
-        <img class="h-8 lg:h-12" src="justinev2.png" />
+      <div class="flex flex-col items-center justify-center w-full mb-6">
+        <div class="text-xs italic">Body Measurements by</div>
+        <img class="h-10 mt-2 lg:h-12" src="justinev2.png" />
       </div>
     </div>
   </div>

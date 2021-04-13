@@ -30,7 +30,11 @@
     </div>
     <div class="py-8 border-t">
       <h2 class="mb-4 text-xl">Full Table</h2>
-      <BaseTable :data="table2Data" />
+      <BaseTable
+        :data="table2Data"
+        :button-col="buttonCol"
+        @cell-click="handleCellClick"
+      />
     </div>
   </div>
 </template>
@@ -51,8 +55,11 @@ import {
   calculationKeys,
   generateTable2Data,
   getTime,
+  TableCellClick,
 } from '@/core'
-import { last } from 'lodash'
+import { last, indexOf } from 'lodash'
+
+const buttonKey = 'Delete'
 
 export default Vue.extend({
   data() {
@@ -92,11 +99,24 @@ export default Vue.extend({
     table2Data(): Table {
       return generateTable2Data(this.measurements)
     },
+    buttonCol(): number[] {
+      const head = this.table2Data[0] || []
+      const d = []
+      for (const i of head) {
+        if (typeof i === 'object' && i.name === buttonKey) {
+          d.push(indexOf(head, i))
+        }
+      }
+      return d
+    },
   },
   mounted() {
     this.checkUser()
   },
   methods: {
+    handleCellClick(event: TableCellClick) {
+      this.measurements.splice(event.rowIndex - 1, 1)
+    },
     checkUser() {
       this.$fireModule.auth().onAuthStateChanged((user) => {
         if (user) {

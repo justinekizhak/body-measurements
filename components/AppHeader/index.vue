@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 left-0 z-10 flex items-center justify-between w-full gap-4 px-8 py-4 bg-gray-800 ribbon"
+    class="fixed top-0 left-0 z-10 flex items-center justify-between w-full gap-4 px-8 py-4 bg-gray-800 lg:py-8 ribbon"
   >
     <div
       class="text-3xl font-bold tracking-widest uppercase break-all cursor-pointer font-anurati"
