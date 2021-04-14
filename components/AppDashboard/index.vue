@@ -72,9 +72,16 @@ import { last, indexOf } from 'lodash'
 const buttonKey = 'Delete'
 
 export default Vue.extend({
-  data() {
+  data(): {
+    loadingData: boolean
+    measurements: Measurement[]
+    uid: string
+    distanceUnit: string
+    open: boolean
+    deleteCell: TableCellClick | null
+  } {
     const measurements: Measurement[] = []
-    const deleteCell: TableCellClick | null = {}
+    const deleteCell: TableCellClick | null = null
     return {
       loadingData: false,
       measurements,
