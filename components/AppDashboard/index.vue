@@ -36,6 +36,7 @@
         @cell-click="handleCellClick"
       />
     </div>
+    <base-modal v-if="open" @toggle-modal="toggleModal"></base-modal>
   </div>
 </template>
 
@@ -69,6 +70,7 @@ export default Vue.extend({
       measurements,
       uid: '',
       distanceUnit: 'cm',
+      open: false,
     }
   },
   computed: {
@@ -115,6 +117,7 @@ export default Vue.extend({
   },
   methods: {
     handleCellClick(event: TableCellClick) {
+      this.toggleModal()
       this.measurements.splice(event.rowIndex - 1, 1)
     },
     checkUser() {
@@ -146,6 +149,9 @@ export default Vue.extend({
         await delay(1000)
         this.loadingData = false
       }
+    },
+    toggleModal() {
+      this.open = !this.open
     },
   },
 })
