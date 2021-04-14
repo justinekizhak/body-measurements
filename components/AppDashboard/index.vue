@@ -36,7 +36,16 @@
         @cell-click="handleCellClick"
       />
     </div>
-    <base-modal v-if="open" @toggle-modal="toggleModal"></base-modal>
+    <base-modal :open="open" title="Delete?" @toggle-modal="toggleModal">
+      <div class="flex justify-between mt-4">
+        <base-button color="blue" no-border @click="handleModal('no')"
+          >No</base-button
+        >
+        <base-button color="red" no-border @click="handleModal('yes')"
+          >Yes</base-button
+        >
+      </div>
+    </base-modal>
   </div>
 </template>
 
@@ -65,12 +74,14 @@ const buttonKey = 'Delete'
 export default Vue.extend({
   data() {
     const measurements: Measurement[] = []
+    const deleteCell: TableCellClick | null = {}
     return {
       loadingData: false,
       measurements,
       uid: '',
       distanceUnit: 'cm',
       open: false,
+      deleteCell,
     }
   },
   computed: {
@@ -117,8 +128,8 @@ export default Vue.extend({
   },
   methods: {
     handleCellClick(event: TableCellClick) {
+      this.deleteCell = event
       this.toggleModal()
-      this.measurements.splice(event.rowIndex - 1, 1)
     },
     checkUser() {
       this.$fireModule.auth().onAuthStateChanged((user) => {
@@ -152,6 +163,16 @@ export default Vue.extend({
     },
     toggleModal() {
       this.open = !this.open
+    },
+    handleModal(key: string) {
+      if (key === 'yes') {
+        if (this.deleteCell?.rowIndex) {
+          this.measurements.splice(this.deleteCell.rowIndex - 1, 1)
+        }
+      } else if (key === 'no') {
+        this.deleteCell = null
+      }
+      this.toggleModal()
     },
   },
 })
