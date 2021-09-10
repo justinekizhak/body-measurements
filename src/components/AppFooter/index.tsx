@@ -9,14 +9,6 @@ export default () => {
       label: "About this project",
       href: "#",
     },
-    {
-      label: "About this project",
-      href: "#",
-    },
-    {
-      label: "About this project",
-      href: "#",
-    },
   ];
   const legalLinks = [
     {
