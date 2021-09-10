@@ -22,14 +22,14 @@ export const mainFormInputs: FormElement[] = [
   {
     type: "toggle",
     props: {
-      name: "roughEstimate",
+      name: "preciseEstimate",
       default: false,
       label: "I  know my wrist circumference",
       hint: "Wrist circumference will give you better results",
     },
   },
   {
-    if: (store) => store["roughEstimate"],
+    if: (store) => store["preciseEstimate"],
     props: {
       name: "wrist",
       type: "number",

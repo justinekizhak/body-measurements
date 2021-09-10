@@ -12,19 +12,23 @@ import {
   ToggleProps,
 } from "~/interfaces/input-elements";
 import { mainFormInputs } from "./data";
+import { calculateIdealMeasurement } from "~/core/calcuation";
+import { CalculateInput } from "~/interfaces/core/calculations";
 
 export default () => {
   const [store, setStore] = createStore({
     formData: {},
   });
 
-  const setValue = (key: string, value: string) => {
-    setStore(
-      "formData",
-      produce((formData) => {
-        formData[key] = value;
-      })
-    );
+  const setValue = (key: string, value: string | number) => {
+    !isNil(key) &&
+      !isNil(value) &&
+      setStore(
+        "formData",
+        produce((formData) => {
+          formData[key] = value;
+        })
+      );
   };
 
   onMount(() => {
@@ -41,12 +45,16 @@ export default () => {
     setValue(key, value);
   };
 
+  const handleNumberInput = ({ key, value }) => {
+    setValue(key, parseFloat(value + ""));
+  };
+
   const inputMap = {
     radio: (props: RadioProps) => (
       <Radio {...props} onChange={handleFormInput} />
     ),
     number: (props: InputProps) => (
-      <Input {...props} onChange={handleFormInput} />
+      <Input {...props} onChange={handleNumberInput} />
     ),
     toggle: (props: ToggleProps) => (
       <Toggle {...props} onChange={handleFormInput} />
@@ -69,7 +77,10 @@ export default () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Form data: ", store.formData);
+    const idealMeasurements = calculateIdealMeasurement({
+      ...store.formData,
+    } as CalculateInput);
+    console.log("Ideal measurements", idealMeasurements);
   };
   return (
     <div class="m-8 lg:mx-auto lg:w-[640px]">

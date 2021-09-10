@@ -26,7 +26,7 @@ export interface InputProps {
   max?: string;
   minLength?: string;
   onChange?: FormChangeHandler;
-  defaultUnit: FormElementNumberCategoryUnits;
+  defaultUnit?: FormElementNumberCategoryUnits;
   category?: FormElementNumberCategory;
 }
 
