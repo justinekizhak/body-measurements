@@ -11,20 +11,30 @@ export const mainFormInputs: FormElement[] = [
     },
   },
   {
-    type: "toggle",
     props: {
-      name: "roughEstimate",
-      default: true,
-      label: "I don't know my wrist circumference",
+      name: "height",
+      type: "number",
+      label: "Height",
+      min: "0",
+      category: "length",
     },
   },
   {
-    category: "length",
-    props: { name: "height", type: "number", label: "Height" },
+    type: "toggle",
+    props: {
+      name: "roughEstimate",
+      default: false,
+      label: "I  know my wrist circumference",
+      hint: "Wrist circumference will give you better results",
+    },
   },
   {
-    category: "length",
-    if: (store) => !store["roughEstimate"],
-    props: { name: "wrist", type: "number", label: "Wrist" },
+    if: (store) => store["roughEstimate"],
+    props: {
+      name: "wrist",
+      type: "number",
+      label: "Wrist",
+      category: "length",
+    },
   },
 ];

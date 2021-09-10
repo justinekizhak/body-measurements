@@ -4,6 +4,8 @@ export interface FormInputChangeProps {
 }
 
 export type FormChangeHandler = (value: FormInputChangeProps) => null | void;
+export type FormElementNumberCategory = "length" | "weight";
+export type FormElementNumberCategoryUnits = "cm" | "inch" | "kg" | "pound";
 
 export interface RadioProps {
   name: string;
@@ -20,7 +22,12 @@ export interface InputProps {
   type: "text" | "number";
   label?: string;
   hint?: string;
+  min?: string;
+  max?: string;
+  minLength?: string;
   onChange?: FormChangeHandler;
+  defaultUnit: FormElementNumberCategoryUnits;
+  category?: FormElementNumberCategory;
 }
 
 export interface ToggleProps {

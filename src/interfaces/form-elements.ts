@@ -10,7 +10,6 @@ export interface FormElementRadio extends CommonFormElements {
 }
 
 export interface FormElementNumber extends CommonFormElements {
-  category: "length" | "weight";
   props: InputProps;
 }
 
