@@ -1,27 +1,25 @@
-export interface RadioProps {
-  name: string;
-  options?: string[];
-  onClick?: (value: string) => null;
-  default?: string;
+import { InputProps, RadioProps, ToggleProps } from "./input-elements";
+
+export interface CommonFormElements {
+  if?: (data: any) => boolean;
 }
 
-export interface InputProps {
-  name: string;
-  placeholder?: string;
-  type: "text" | "number";
-  hint?: string;
-}
-
-export type FormInput = InputProps | RadioProps;
-
-export interface FormElementRadio {
+export interface FormElementRadio extends CommonFormElements {
   type: "radio";
   props: RadioProps;
 }
 
-export interface FormElementNumber {
+export interface FormElementNumber extends CommonFormElements {
   category: "length" | "weight";
   props: InputProps;
 }
 
-export type FormElement = FormElementNumber | FormElementRadio;
+export interface FormElementToggle extends CommonFormElements {
+  type: "toggle";
+  props: ToggleProps;
+}
+
+export type FormElement =
+  | FormElementNumber
+  | FormElementRadio
+  | FormElementToggle;

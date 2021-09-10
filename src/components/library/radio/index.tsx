@@ -1,20 +1,20 @@
 import { For, createSignal } from "solid-js";
-import { RadioProps } from "~/interfaces/form-elements";
 import { get } from "lodash-es";
+import { RadioProps } from "~/interfaces/input-elements";
 
 export default (props: RadioProps) => {
   const [selected, setSelected] = createSignal(props.default || "");
 
-  const handleClick = (event) => {
+  const handleClick = (event: any) => {
     const value: string = get(event, "target.value", "");
-    console.log(value);
     setSelected(value);
-    props.onClick && props.onClick(value);
+    props.onChange && props.onChange({ key: props.name, value });
   };
+
   return (
     <fieldset>
-      <legend class="font-medium text-sm text-gray-700 dark:text-white block capitalize">
-        {props.name || ""}
+      <legend class="font-medium text-sm text-gray-700 dark:text-white block ">
+        {props.label || props.name}
       </legend>
       <div class="relative bg-white rounded-md -space-y-px">
         <For each={props.options || []}>
@@ -38,7 +38,7 @@ export default (props: RadioProps) => {
                   class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                   aria-labelledby={props.name + "-label"}
                   aria-describedby={props.name + "-description-" + option}
-                  onClick={handleClick}
+                  onChange={handleClick}
                 />
 
                 <span
