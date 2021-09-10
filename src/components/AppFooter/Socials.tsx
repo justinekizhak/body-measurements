@@ -50,7 +50,7 @@ export default () => {
         <select
           value={mode()}
           onChange={handleThemeChange}
-          class="w-full focus:outline-none pl-10 py-2 appearance-none flex items-center h-12 border rounded border-gray-700 dark:border-gray-50 text-sm leading-5 dark:bg-gray-900 dark:text-gray-50"
+          class="w-full focus:outline-none pl-10 py-2 appearance-none flex items-center h-12 border rounded border-gray-700 dark:border-gray-50 text-sm leading-5 dark:bg-gray-800 dark:text-gray-50"
         >
           <For each={themeValues}>
             {(value) => <option value={value.key}>{value.label}</option>}

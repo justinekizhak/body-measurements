@@ -28,8 +28,8 @@ export default () => {
   const allLinks = [links, legalLinks];
   return (
     <footer class="pt-12">
-      <footer id="footer" class="relative z-50 dark:bg-gray-900 pt-24">
-        <div class=" border-t border-b border-gray-200 dark:border-gray-700 py-16">
+      <footer id="footer" class="relative z-50 dark:bg-gray-800 pt-24">
+        <div class=" border-t border-b  dark:border-gray-700 py-16 mx-8 border-gray-300">
           <div class="container mx-auto grid grid-cols-2 lg:grid-cols-3 gap-8 px-8">
             <For each={allLinks}>
               {(linkCategory) => (

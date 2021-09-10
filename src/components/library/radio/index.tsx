@@ -13,7 +13,7 @@ export default (props: RadioProps) => {
   };
   return (
     <fieldset>
-      <legend class="font-medium text-sm text-gray-700 block capitalize">
+      <legend class="font-medium text-sm text-gray-700 dark:text-white block capitalize">
         {props.name || ""}
       </legend>
       <div class="relative bg-white rounded-md -space-y-px">

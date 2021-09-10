@@ -5,7 +5,7 @@ export default (props: InputProps) => {
     <div>
       <label
         for="email"
-        class="font-medium text-sm text-gray-700 block capitalize"
+        class="font-medium text-sm text-gray-700 dark:text-white block capitalize"
       >
         {props.name}
       </label>
