@@ -3,7 +3,7 @@ import { MenuProps } from "~/interfaces/header";
 
 export default (props: MenuProps) => {
   return (
-    <div ref={props.ref} class="sm:hidden" id="mobile-menu">
+    <div ref={props.ref} class="" id="mobile-menu">
       <div class="pt-4 pb-3 border-t border-gray-200">
         <div class="flex items-center px-4">
           <div class="flex-shrink-0">

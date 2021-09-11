@@ -1,9 +1,10 @@
 import { For, createSignal, onMount } from "solid-js";
 import { MenuProps } from "~/interfaces/header";
 import gsap from "gsap";
+import { useOutsideClick } from "~/hooks/useOutsideClick";
 
 export default (props: MenuProps) => {
-  let menu;
+  let menu, menuContainer;
   const [menuOpen, setMenuOpen] = createSignal(false);
 
   const toggleMenu = () => {
@@ -28,9 +29,13 @@ export default (props: MenuProps) => {
 
   onMount(() => {
     gsap.set(menu, { opacity: 0, scale: 0.95 });
+    useOutsideClick(menuContainer, () => {
+      toggleMenu();
+    });
   });
+
   return (
-    <div>
+    <div ref={menuContainer}>
       <button
         type="button"
         class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

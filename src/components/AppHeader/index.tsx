@@ -6,6 +6,7 @@ import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";
 import gsap from "gsap";
 import { createSignal, onMount } from "solid-js";
+import profilePic from "~/assets/images/profile-pic.png";
 
 export default () => {
   const navItems = [
@@ -27,8 +28,7 @@ export default () => {
     user: {
       email: "test@email.com",
       name: "test",
-      photo:
-        "https://i.pinimg.com/originals/43/19/33/43193307f77a5d04a1dbddeca94c72f2.png",
+      photo: profilePic,
     },
     navItems,
   };
@@ -51,6 +51,7 @@ export default () => {
   onMount(() => {
     const height = mobileMenuContent.offsetHeight;
     setMobileMenuHeight(height);
+    mobileMenuContent.classList.add("lg:hidden");
     gsap.set(mobileMenuContent, { height: 0 });
   });
 
@@ -85,7 +86,7 @@ export default () => {
         <div class="lg:hidden">
           <CallToAction />
         </div>
-        <div ref={mobileMenuContent} class="overflow-hidden lg:hidden">
+        <div ref={mobileMenuContent} class="overflow-hidden ">
           <MobileMenu {...menuProps} />
         </div>
       </nav>
