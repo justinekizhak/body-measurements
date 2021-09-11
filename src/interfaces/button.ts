@@ -6,5 +6,6 @@ export interface Button {
   name?: string;
   children?: JSXElement;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  class?: string;
   onClick?: ({ name: string }) => null | void;
 }

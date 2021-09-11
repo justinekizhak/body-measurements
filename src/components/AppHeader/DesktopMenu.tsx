@@ -12,25 +12,29 @@ export default (props: MenuProps) => {
       // Opening
       gsap.fromTo(
         menu,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.2, ease: "ease-out" }
+        { autoAlpha: 0, scale: 0.95 },
+        { autoAlpha: 1, scale: 1, duration: 0.2, ease: "ease-out" }
       );
       setMenuOpen(true);
     } else {
       // Closing
-      gsap.fromTo(
-        menu,
-        { opacity: 1, scale: 1 },
-        { opacity: 0, scale: 0.95, duration: 0.075, ease: "ease-in" }
-      );
-      setMenuOpen(false);
+      closeMenu();
     }
   };
 
+  const closeMenu = () => {
+    gsap.fromTo(
+      menu,
+      { autoAlpha: 1, scale: 1 },
+      { autoAlpha: 0, scale: 0.95, duration: 0.075, ease: "ease-in" }
+    );
+    setMenuOpen(false);
+  };
+
   onMount(() => {
-    gsap.set(menu, { opacity: 0, scale: 0.95 });
+    gsap.set(menu, { autoAlpha: 0, scale: 0.95 });
     useOutsideClick(menuContainer, () => {
-      toggleMenu();
+      menuOpen() && closeMenu();
     });
   });
 

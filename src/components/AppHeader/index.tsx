@@ -56,22 +56,13 @@ export default () => {
   });
 
   return (
-    <header>
-      <nav class=" shadow">
+    <header class="sticky top-0 z-50">
+      <nav class=" shadow bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
             <div class="flex">
               <div class="flex-shrink-0 flex items-center">
-                <img
-                  class="block lg:hidden h-8 w-auto"
-                  src={fullLogo}
-                  alt="BM logo"
-                />
-                <img
-                  class="hidden lg:block h-8 w-auto"
-                  src={fullLogo}
-                  alt="BM logo"
-                />
+                <img class="block h-8 w-auto" src={fullLogo} alt="BM logo" />
               </div>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:items-center">

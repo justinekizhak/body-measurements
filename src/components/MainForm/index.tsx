@@ -14,8 +14,9 @@ import {
 import { mainFormInputs } from "./data";
 import { calculateIdealMeasurement } from "~/core/calcuation";
 import { CalculateInput } from "~/interfaces/core/calculations";
+import { FindIdealFormProps } from "~/interfaces/find-ideal-form";
 
-export default () => {
+export default (props: FindIdealFormProps) => {
   const [store, setStore] = createStore({
     formData: {},
   });
@@ -80,7 +81,7 @@ export default () => {
     const idealMeasurements = calculateIdealMeasurement({
       ...store.formData,
     } as CalculateInput);
-    console.log("Ideal measurements", idealMeasurements);
+    props.handleResults && props.handleResults(true, idealMeasurements);
   };
   return (
     <div class="m-8 lg:mx-auto lg:w-[640px]">

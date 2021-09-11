@@ -25,7 +25,7 @@ export default (props: RadioProps) => {
                 "rounded-t-md": index() === 0,
                 "rounded-b-md": index() === props.options.length - 1,
                 [option === selected()
-                  ? "bg-indigo-50 border-indigo-200 z-10"
+                  ? "bg-indigo-50 border-indigo-200"
                   : "border-gray-200"]: true,
               }}
             >

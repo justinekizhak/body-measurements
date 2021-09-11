@@ -1,5 +1,5 @@
-import MainForm from "~/components/MainForm";
+import FindIdeal from "~/components/FindIdeal";
 
 export default () => {
-  return <MainForm />;
+  return <FindIdeal />;
 };

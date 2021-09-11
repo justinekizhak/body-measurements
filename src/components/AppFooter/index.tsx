@@ -27,35 +27,33 @@ export default () => {
 
   const allLinks = [links, legalLinks];
   return (
-    <footer class="pt-12">
-      <footer id="footer" class="relative z-50 dark:bg-gray-800 pt-24">
-        <div class=" border-t border-b  dark:border-gray-700 py-16 mx-8 border-gray-300">
-          <div class="container mx-auto grid grid-cols-2 lg:grid-cols-3 gap-8 px-8">
-            <For each={allLinks}>
-              {(linkCategory) => (
-                <div class="gap-6 flex flex-col">
-                  <For each={linkCategory}>
-                    {(link) => (
-                      <Link href={link.href}>
-                        <a class="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">
-                          {link.label}
-                        </a>
-                      </Link>
-                    )}
-                  </For>
-                </div>
-              )}
-            </For>
-            <Socials />
-          </div>
+    <footer id="footer" class="relative  dark:bg-gray-800 pt-24">
+      <div class=" border-t border-b dark:border-gray-700 py-16 mx-8 lg:mx-auto max-w-7xl border-gray-300">
+        <div class="container mx-auto grid grid-cols-2 lg:grid-cols-3 gap-8 px-8">
+          <For each={allLinks}>
+            {(linkCategory) => (
+              <div class="gap-6 flex flex-col">
+                <For each={linkCategory}>
+                  {(link) => (
+                    <Link href={link.href}>
+                      <a class="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">
+                        {link.label}
+                      </a>
+                    </Link>
+                  )}
+                </For>
+              </div>
+            )}
+          </For>
+          <Socials />
         </div>
-        <div class="py-16 flex flex-col justify-center items-center">
-          <img src={jkLogo} alt="jk logo" class="lg:w-1/2" />
-          <p class="mt-6 text-xs lg:text-sm leading-none text-gray-900 dark:text-gray-50">
-            Copyright © 2021 Justine Kizhakkinedath. All Rights Reserved.
-          </p>
+      </div>
+      <div class="py-16 flex flex-col justify-center items-center max-w-7xl mx-auto">
+        <img src={jkLogo} alt="jk logo" class="lg:w-1/4" />
+        <div class="mt-6 text-xs lg:text-sm lg:text-center  text-gray-900 dark:text-gray-50 w-full px-8">
+          Copyright © 2021 Justine Kizhakkinedath. All Rights Reserved.
         </div>
-      </footer>
+      </div>
     </footer>
   );
 };
