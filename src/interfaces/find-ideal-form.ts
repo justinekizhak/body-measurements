@@ -1,3 +1,3 @@
-export interface FindIdealFormProps {
-  handleResults: (showResults: boolean) => void;
-}
+// export interface FindIdealFormProps {
+//   handleResults: (showResults: boolean) => void;
+// }

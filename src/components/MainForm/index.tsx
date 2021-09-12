@@ -1,5 +1,4 @@
 import { For, onMount, Show } from "solid-js";
-// import { createStore, produce } from "solid-js/store";
 import Input from "~/components/library/input";
 import Radio from "~/components/library/radio";
 import Toggle from "~/components/library/Toggle";
@@ -14,7 +13,6 @@ import {
 import { mainFormInputs } from "./data";
 import { calculateIdealMeasurement } from "~/core/calcuation";
 import { CalculateInput } from "~/interfaces/core/calculations";
-import { FindIdealFormProps } from "~/interfaces/find-ideal-form";
 import { useGlobalStore } from "~/store";
 
 export default () => {
@@ -79,10 +77,10 @@ export default () => {
       ...data,
     } as CalculateInput);
 
-    updateState("results", idealMeasurements);
-    updateState("showResults", true);
-
-    console.log("global state: ", globalState);
+    if (updateState) {
+      updateState("results", idealMeasurements);
+      updateState("showResults", true);
+    }
   };
   return (
     <div class="m-8 lg:mx-auto lg:w-[640px]">

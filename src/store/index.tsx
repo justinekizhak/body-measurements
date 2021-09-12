@@ -1,5 +1,6 @@
 import { providerFactory } from "./provider";
 
+// Store structure
 const storeStructure = {
   formData: {},
   results: {},

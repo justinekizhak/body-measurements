@@ -1,3 +1,3 @@
-export interface IdealMResultProps {
-  handleReset: (showResult: boolean) => void;
-}
+// export interface IdealMResultProps {
+//   handleReset: (showResult: boolean) => void;
+// }
