@@ -1,5 +1,5 @@
 import { For, onMount, Show } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+// import { createStore, produce } from "solid-js/store";
 import Input from "~/components/library/input";
 import Radio from "~/components/library/radio";
 import Toggle from "~/components/library/Toggle";
@@ -15,21 +15,16 @@ import { mainFormInputs } from "./data";
 import { calculateIdealMeasurement } from "~/core/calcuation";
 import { CalculateInput } from "~/interfaces/core/calculations";
 import { FindIdealFormProps } from "~/interfaces/find-ideal-form";
+import { useGlobalStore } from "~/store";
 
 export default (props: FindIdealFormProps) => {
-  const [store, setStore] = createStore({
-    formData: {},
-  });
+  const [globalState, { updateState }] = useGlobalStore();
 
   const setValue = (key: string, value: string | number) => {
     !isNil(key) &&
       !isNil(value) &&
-      setStore(
-        "formData",
-        produce((formData) => {
-          formData[key] = value;
-        })
-      );
+      updateState &&
+      updateState(["formData", key], value);
   };
 
   onMount(() => {
@@ -66,7 +61,8 @@ export default (props: FindIdealFormProps) => {
     if (!inputElement.if) {
       return true;
     }
-    const value = inputElement.if(store.formData);
+    const data = get(globalState, "formData", {});
+    const value = inputElement.if(data);
     return value;
   };
 
@@ -78,9 +74,11 @@ export default (props: FindIdealFormProps) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const data: object = get(globalState, "formData", {});
     const idealMeasurements = calculateIdealMeasurement({
-      ...store.formData,
+      ...data,
     } as CalculateInput);
+
     props.handleResults && props.handleResults(true, idealMeasurements);
   };
   return (
