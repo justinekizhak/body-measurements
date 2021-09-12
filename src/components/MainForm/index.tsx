@@ -17,7 +17,7 @@ import { CalculateInput } from "~/interfaces/core/calculations";
 import { FindIdealFormProps } from "~/interfaces/find-ideal-form";
 import { useGlobalStore } from "~/store";
 
-export default (props: FindIdealFormProps) => {
+export default () => {
   const [globalState, { updateState }] = useGlobalStore();
 
   const setValue = (key: string, value: string | number) => {
@@ -79,7 +79,10 @@ export default (props: FindIdealFormProps) => {
       ...data,
     } as CalculateInput);
 
-    props.handleResults && props.handleResults(true, idealMeasurements);
+    updateState("results", idealMeasurements);
+    updateState("showResults", true);
+
+    console.log("global state: ", globalState);
   };
   return (
     <div class="m-8 lg:mx-auto lg:w-[640px]">

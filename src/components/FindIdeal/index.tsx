@@ -1,34 +1,22 @@
-import { createSignal, Show } from "solid-js";
-import { createStore } from "solid-js/store";
+import { Switch, Match } from "solid-js";
 import MainForm from "~/components/MainForm";
-import { FormData } from "~/interfaces/core/calculations";
+import { useGlobalStore } from "~/store";
 import ShowResults from "../ShowResults";
+import { get } from "lodash-es";
 
 export default () => {
-  const [showResults, setShowResults] = createSignal(false);
-  const [store, setStore] = createStore({
-    ideal: {},
-  });
-
-  const handleResults = (show: boolean, data: FormData) => {
-    setShowResults(show);
-    setStore("ideal", data);
-  };
-
-  const handleReset = (show: boolean) => {
-    setShowResults(show);
-  };
+  const [globalStore] = useGlobalStore();
+  const showResults = () => get(globalStore, "showResults", false);
   return (
     <div>
-      <Show
-        when={showResults()}
-        fallback={<MainForm handleResults={handleResults} />}
-      >
-        <ShowResults
-          ideal={store.ideal as FormData}
-          handleReset={handleReset}
-        />
-      </Show>
+      <Switch>
+        <Match when={!showResults()}>
+          <MainForm />
+        </Match>
+        <Match when={showResults()}>
+          <ShowResults />
+        </Match>
+      </Switch>
     </div>
   );
 };
